@@ -90,16 +90,6 @@ php artisan storage:link
 php artisan serve
 ```
 
-Open **http://127.0.0.1:8000**
-
-### Default admin credentials
-| | |
-|---|---|
-| URL | `/login` |
-| E-mail | `admin@kopirider.id` |
-| Password | `kopirider123` |
-
-> ⚠️ Change the password before going live (register a new user + delete the seeder account, or run `php artisan tinker` → `User::first()->update(['password' => bcrypt('yours')])`).
 
 ### MySQL / MariaDB (production)
 The `.env.example` contains the commented MySQL block — set it, create the database,
