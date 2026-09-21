@@ -30,7 +30,7 @@
       <div>
         <b>Kopi Rider</b>
         <span class="logo-sub">Coffee Truck · Bali</span>
-      </div>
+      </div
     </a>
     <div class="nav-links">
       <a class="nav-item" href="{{ route('packages') }}">Packages</a>

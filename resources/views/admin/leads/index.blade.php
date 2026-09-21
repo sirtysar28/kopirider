@@ -34,6 +34,7 @@
         <tr>
           <th>Ref</th><th>Name</th><th>WhatsApp</th><th>Event</th><th>Date</th>
           <th>Guests</th><th>Package</th><th>Status</th><th>Type</th><th>WA opened</th><th>Created</th>
+          @if (auth()->user()->isSuperAdmin())<th></th>@endif
         </tr>
       </thead>
       <tbody>
@@ -50,9 +51,20 @@
             <td data-label="Type"><span class="badge {{ $lead->is_complete ? 'complete' : 'partial' }}">{{ $lead->is_complete ? 'complete' : 'partial' }}</span></td>
             <td data-label="WA opened">{{ $lead->whatsapp_opened_at?->format('d M H:i') ?? '—' }}</td>
             <td data-label="Created" class="muted">{{ $lead->created_at->format('d M Y H:i') }}</td>
+            @if (auth()->user()->isSuperAdmin())
+              <td data-label="">
+                <form method="POST" action="{{ route('admin.leads.destroy', $lead) }}"
+                      onsubmit="return confirm('Permanently delete lead {{ $lead->reference }}?\nThis also removes its payment records and cannot be undone.')"
+                      style="display:inline;">
+                  @csrf
+                  @method('DELETE')
+                  <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                </form>
+              </td>
+            @endif
           </tr>
         @empty
-          <tr><td colspan="11" class="muted">No leads match the filters.</td></tr>
+          <tr><td colspan="{{ auth()->user()->isSuperAdmin() ? 12 : 11 }}" class="muted">No leads match the filters.</td></tr>
         @endforelse
       </tbody>
     </table>

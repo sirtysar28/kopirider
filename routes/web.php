@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\LeadController;
 use App\Http\Controllers\Admin\PackageController;
 use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\TerminalController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\AuthController;
@@ -51,6 +52,12 @@ Route::post('/api/midtrans/notification', [MidtransWebhookController::class, 'ha
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->name('login.attempt');
+
+    // Forgot / reset password (branded HTML e-mail)
+    Route::get('/forgot-password', [AuthController::class, 'showForgotPassword'])->name('password.request');
+    Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('password.email');
+    Route::get('/reset-password/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
+    Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
 });
 
 Route::post('/logout', [AuthController::class, 'logout'])
@@ -68,6 +75,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('/leads', [LeadController::class, 'index'])->name('leads.index');
     Route::get('/leads/{lead}', [LeadController::class, 'show'])->name('leads.show');
     Route::put('/leads/{lead}', [LeadController::class, 'update'])->name('leads.update');
+    Route::delete('/leads/{lead}', [LeadController::class, 'destroy'])->name('leads.destroy');
 
     Route::get('/calendar', [AdminCalendarController::class, 'index'])->name('calendar.index');
     Route::post('/calendar', [AdminCalendarController::class, 'update'])->name('calendar.update');
@@ -93,8 +101,14 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::post('/settings', [SettingController::class, 'update'])->name('settings.update');
     Route::post('/settings/password', [SettingController::class, 'updatePassword'])->name('settings.password');
     Route::post('/settings/branding', [SettingController::class, 'updateBranding'])->name('settings.branding');
+    Route::post('/settings/test-email', [SettingController::class, 'sendTestEmail'])->name('settings.test-email');
+
+    // Artisan terminal — migrate / storage:link / optimize without SSH
+    Route::get('/terminal', [TerminalController::class, 'index'])->name('terminal.index');
+    Route::post('/terminal/run', [TerminalController::class, 'run'])->name('terminal.run');
 
     Route::post('/users', [UserController::class, 'store'])->name('users.store');
+    Route::put('/users/{user}/role', [UserController::class, 'updateRole'])->name('users.role');
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 
     Route::get('/analytics', [AdminAnalyticsController::class, 'index'])->name('analytics.index');

@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manual Book — Kopi Rider Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,480;9..144,600&family=Work+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   KOPI RIDER — Manual Book (single-file, coffee themed)
+   ============================================================ */
+* { box-sizing: border-box; margin: 0; }
+:root {
+  --brown: #2A1B12;
+  --brown-2: #3C2417;
+  --coffee: #8B4226;
+  --gold: #C98A34;
+  --cream: #F6ECD9;
+  --cream-2: #FCF6EA;
+  --line: #E4D5BC;
+  --ok: #2F7D4F;
+  --warn: #B07715;
+  --danger: #A6382E;
+  --text: #2A1B12;
+  --muted: #7A6A58;
+}
+html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+body {
+  background: var(--cream);
+  color: var(--text);
+  font-family: 'Work Sans', system-ui, -apple-system, sans-serif;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, h4 { font-family: 'Fraunces', Georgia, serif; font-weight: 600; line-height: 1.25; }
+a { color: var(--coffee); text-decoration: none; }
+a:hover { text-decoration: underline; }
+code, kbd {
+  font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  font-size: .86em; background: #EFE2C8; color: #5C3A1E;
+  border: 1px solid #E0CDA8; border-radius: 6px; padding: 2px 7px;
+}
+kbd { box-shadow: 0 1px 0 #D8C29A; }
+
+/* ---------- layout ---------- */
+.shell { display: grid; grid-template-columns: 280px 1fr; min-height: 100vh; }
+/* mobile drawer backdrop — MUST be display:none globally so it is not a grid item on desktop */
+.backdrop { display: none; }
+
+/* ---------- sidebar / TOC ---------- */
+.toc {
+  background: var(--brown); color: var(--cream);
+  padding: 26px 18px 40px; position: sticky; top: 0; height: 100vh; overflow-y: auto;
+}
+.toc .brand { display: flex; align-items: center; gap: 12px; padding: 0 8px 18px; border-bottom: 1px solid rgba(246,236,217,.14); margin-bottom: 14px; }
+.toc .brand .mark {
+  background: var(--gold); color: #1C1108; border-radius: 12px; width: 42px; height: 42px;
+  display: grid; place-items: center; font-weight: 800; font-size: 20px;
+}
+.toc .brand img.mark { background: #FCF6EA ; object-fit: contain; }
+.toc .brand b { font-family: 'Fraunces', serif; font-size: 19px; display: block; }
+.toc .brand span { font-size: 10px; letter-spacing: .16em; opacity: .6; }
+.toc .search { margin: 0 0 14px; }
+.toc .search input {
+  width: 100%; padding: 10px 14px; border-radius: 12px; border: 1px solid rgba(246,236,217,.2);
+  background: rgba(246,236,217,.08); color: var(--cream); font: inherit; font-size: 13px; outline: none;
+}
+.toc .search input::placeholder { color: rgba(246,236,217,.45); }
+.toc .search input:focus { border-color: var(--gold); }
+.toc-group { font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: rgba(246,236,217,.45); margin: 16px 10px 6px; }
+.toc a {
+  display: block; padding: 8px 12px; border-radius: 10px; font-size: 13.5px; font-weight: 500;
+  color: rgba(246,236,217,.72); text-decoration: none; transition: background .15s, color .15s;
+}
+.toc a:hover { background: rgba(246,236,217,.1); color: var(--cream); text-decoration: none; }
+.toc a.active { background: var(--coffee); color: #fff; }
+.toc .foot { margin-top: 22px; padding: 12px 10px 0; border-top: 1px solid rgba(246,236,217,.14); font-size: 11.5px; color: rgba(246,236,217,.45); }
+.hidden { display: none !important; }
+
+/* ---------- content ---------- */
+.content { padding: 40px 48px 90px; max-width: 940px; }
+section { margin-bottom: 56px; }
+.sec-head { display: flex; align-items: center; gap: 14px; margin-bottom: 6px; }
+.sec-head .num {
+  background: var(--gold); color: #1C1108; width: 40px; height: 40px; border-radius: 12px;
+  display: grid; place-items: center; font-weight: 800; font-size: 17px; flex: none;
+}
+h2.sec-title { font-size: 27px; }
+.sec-sub { color: var(--muted); font-size: 14.5px; margin-bottom: 18px; padding-left: 54px; }
+h3 { font-size: 19px; margin: 26px 0 10px; }
+h4 { font-size: 16px; margin: 18px 0 8px; }
+p { margin-bottom: 12px; }
+ul, ol { margin: 0 0 14px 22px; }
+li { margin-bottom: 7px; }
+
+/* cover */
+.cover {
+  background: linear-gradient(150deg, #2A1B12 0%, #3C2417 55%, #522E17 100%);
+  color: var(--cream); border-radius: 22px; padding: 52px 46px; margin-bottom: 52px;
+  position: relative; overflow: hidden;
+}
+.cover::after {
+  content: ""; position: absolute; right: 30px; bottom: -10px; width: 170px; height: 170px;
+  background: url('img/logo-mark.png') center/contain no-repeat; opacity: .14;
+}
+.cover .tag { display: inline-block; background: rgba(201,138,52,.2); color: #E8C284; border: 1px solid rgba(201,138,52,.4); padding: 5px 14px; border-radius: 999px; font-size: 11.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 18px; }
+.cover h1 { font-size: 40px; margin-bottom: 10px; }
+.cover .lead { max-width: 560px; color: rgba(246,236,217,.8); font-size: 15.5px; }
+.cover .meta { margin-top: 26px; display: flex; gap: 26px; flex-wrap: wrap; font-size: 13px; }
+.cover .meta b { display: block; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: rgba(246,236,217,.5); margin-bottom: 2px; }
+
+/* boxes */
+.card { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 20px 22px; margin: 14px 0; }
+.note { border-left: 4px solid var(--gold); background: #FBF3DF; border-radius: 0 14px 14px 0; padding: 14px 18px; margin: 16px 0; font-size: 14.5px; }
+.note.tip    { border-left-color: var(--ok);   background: #EDF7EF; }
+.note.warn   { border-left-color: #C9922E; background: #FCF4E2; }
+.note.danger { border-left-color: var(--danger); background: #FBEEEC; }
+.note b:first-child, .note .nb { display: block; margin-bottom: 4px; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
+
+/* tables */
+table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 14px; background: #fff; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); }
+th { background: var(--brown); color: var(--cream); text-align: left; padding: 11px 14px; font-size: 12.5px; letter-spacing: .05em; }
+td { padding: 10px 14px; border-top: 1px solid #F0E6D2; vertical-align: top; }
+tr:nth-child(even) td { background: #FCF8EF; }
+
+/* steps */
+.steps { counter-reset: step; list-style: none; margin-left: 0; }
+.steps > li { counter-increment: step; position: relative; padding: 0 0 18px 52px; }
+.steps > li::before {
+  content: counter(step); position: absolute; left: 0; top: 0;
+  width: 34px; height: 34px; border-radius: 50%; background: var(--coffee); color: #fff;
+  display: grid; place-items: center; font-weight: 700; font-size: 15px;
+}
+.steps > li:not(:last-child)::after { content: ""; position: absolute; left: 16.5px; top: 38px; bottom: 2px; width: 2px; background: var(--line); }
+.steps > li b { display: block; margin-bottom: 2px; }
+
+/* badges */
+.badge { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 11.5px; font-weight: 700; letter-spacing: .03em; }
+.b-green  { background: #E3F3E7; color: var(--ok); }
+.b-yellow { background: #FBF0D3; color: var(--warn); }
+.b-red    { background: #FBE4E1; color: var(--danger); }
+.b-brown  { background: #F1E4D2; color: #7A4A22; }
+.b-gray   { background: #EFEFEF; color: #666; }
+
+/* terminal preview */
+.term { background: #1A120C; color: #D8CBA8; border-radius: 14px; padding: 16px 18px; font-family: ui-monospace, Menlo, monospace; font-size: 13px; line-height: 1.7; margin: 14px 0; overflow-x: auto; }
+.term .p { color: #E8A34D; }
+
+/* flow */
+.flow { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 16px 0; }
+.flow .f {
+  background: #fff; border: 1.5px solid var(--line); border-radius: 12px; padding: 8px 14px;
+  font-size: 13px; font-weight: 600;
+}
+.flow .arrow { color: var(--gold); font-weight: 800; }
+
+/* top button */
+#toTop {
+  position: fixed; right: 26px; bottom: 26px; width: 46px; height: 46px; border-radius: 50%;
+  background: var(--brown); color: var(--cream); border: none; cursor: pointer; font-size: 19px;
+  box-shadow: 0 6px 18px rgba(42,27,18,.35); opacity: 0; pointer-events: none; transition: opacity .25s;
+}
+#toTop.show { opacity: 1; pointer-events: auto; }
+
+/* print */
+@media print {
+  .toc, #toTop { display: none !important; }
+  .shell { display: block; }
+  .content { padding: 0; max-width: none; }
+  section { page-break-inside: avoid; }
+  body { background: #fff; }
+}
+
+/* mobile */
+.menu-btn { display: none; }
+@media (max-width: 900px) {
+  .shell { grid-template-columns: 1fr; }
+  .toc { position: fixed; inset: 0 auto 0 0; width: 290px; z-index: 50; transform: translateX(-102%); transition: transform .25s; height: 100dvh; }
+  body.toc-open .toc { transform: none; box-shadow: 0 0 60px rgba(0,0,0,.4); }
+  .backdrop { position: fixed; inset: 0; background: rgba(30,17,8,.5); z-index: 40; }
+  body.toc-open .backdrop { display: block; }
+  .menu-btn {
+    display: grid; place-items: center; position: fixed; left: 16px; bottom: 16px; z-index: 45;
+    width: 52px; height: 52px; border-radius: 50%; border: none; cursor: pointer;
+    background: var(--brown); color: var(--cream); font-size: 21px; box-shadow: 0 6px 18px rgba(42,27,18,.4);
+  }
+  .content { padding: 26px 20px 80px; }
+  .cover { padding: 34px 26px; }
+  .cover h1 { font-size: 30px; }
+  .sec-sub { padding-left: 0; }
+}
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- ================= TOC ================= -->
+  <aside class="toc" id="toc">
+    <div class="brand">
+      <img class="mark" src="img/logo-mark.png" alt="Kopi Rider logo">
+      <div><b>Kopi Rider</b><span>MANUAL BOOK</span></div>
+    </div>
+    <div class="search">
+      <input type="search" id="tocSearch" placeholder="🔎 Search topics… (e.g. midtrans)">
+    </div>
+
+    <div class="toc-group">Introduction</div>
+    <a href="#tentang">1. About the Application</a>
+    <a href="#glossary">2. Key Terms</a>
+
+    <div class="toc-group">Getting Started</div>
+    <a href="#login">3. Login &amp; Forgot Password</a>
+    <a href="#dashboard">4. Dashboard</a>
+
+    <div class="toc-group">Daily Operations</div>
+    <a href="#leads">5. Leads (Prospective Customers)</a>
+    <a href="#calendar">6. Calendar</a>
+    <a href="#payments">7. Payments &amp; Midtrans</a>
+
+    <div class="toc-group">Website Content</div>
+    <a href="#packages">8. Packages</a>
+    <a href="#media">9. Media (Gallery)</a>
+
+    <div class="toc-group">Tools &amp; Settings</div>
+    <a href="#analytics">10. Analytics</a>
+    <a href="#terminal">11. Terminal</a>
+    <a href="#settings">12. Settings</a>
+
+    <div class="toc-group">Reference</div>
+    <a href="#sisi-customer">13. Customer Side (Website)</a>
+    <a href="#workflow">14. Complete Workflow</a>
+    <a href="#faq">15. FAQ &amp; Troubleshooting</a>
+
+    <div class="foot">Manual Book v1.0 (EN) · Kopi Rider<br>Developed by Digimagine</div>
+  </aside>
+  <div class="backdrop" id="backdrop"></div>
+
+  <!-- ================= CONTENT ================= -->
+  <main class="content">
+
+    <div class="cover">
+      <span class="tag">Admin Panel Guide</span>
+      <img src="img/logo-mark.png" alt="Kopi Rider logo" style="width:92px;height:92px;border-radius:22px;margin-bottom:18px;display:block; background-color: #FCF6EA;">
+      <h1>Manual Book<br>Kopi Rider</h1>
+      <p class="lead">The complete guide to managing the <b>Coffee Truck Booking &amp; Lead Generation Platform</b> — from replying to your first lead all the way to setting up Midtrans payments.</p>
+      <div class="meta">
+        <div><b>Version</b>v1.0</div>
+        <div><b>Platform</b>Laravel 11 · PHP 8.2+</div>
+        <div><b>Panel URL</b>/admin</div>
+        <div><b>Last Updated</b>September 2026</div>
+      </div>
+    </div>
+
+    <!-- ============ 1. ABOUT ============ -->
+    <section id="tentang">
+      <div class="sec-head"><div class="num">1</div><h2 class="sec-title">About the Application</h2></div>
+      <p class="sec-sub">What Kopi Rider is and how it works at a glance.</p>
+
+      <p><b>Kopi Rider</b> is a coffee truck booking &amp; lead generation platform built with Laravel 11. It is <b>not</b> an online store — there is no cart, no checkout and no automated ordering. The entire system is designed around one goal: turning website visitors into <b>qualified event leads</b> that flow into WhatsApp, where every booking is confirmed by a human.</p>
+
+      <h3>Core System Principles</h3>
+      <div class="card">
+        <ul>
+          <li><b>A lead must never be lost.</b> Customer data is saved to the database <u>first</u>, before the WhatsApp redirect. Even if WhatsApp fails to open, the data is already safe and ready for follow-up.</li>
+          <li><b>Partial leads are still saved.</b> A customer who fills in half the form and quits is still recorded for follow-up.</li>
+          <li><b>Human confirmation.</b> Every booking is confirmed through a WhatsApp conversation, not by the system.</li>
+        </ul>
+      </div>
+
+      <h3>Feature Overview</h3>
+      <table>
+        <tr><th>Module</th><th>Function</th><th>Admin Menu</th></tr>
+        <tr><td>Public website</td><td>Landing, packages, free events, gallery, booking flow</td><td>—</td></tr>
+        <tr><td>Lead capture</td><td>Auto-save partial + full leads, reference number <code>KR-0001</code></td><td>📝 Leads</td></tr>
+        <tr><td>Availability calendar</td><td>Date statuses: available / enquiry / booked</td><td>📅 Calendar</td></tr>
+        <tr><td>Package management</td><td>Full CRUD for paid &amp; free packages with starting prices</td><td>💼 Packages</td></tr>
+        <tr><td>Payments</td><td>Deposit &amp; balance, Midtrans payment links + bank transfer</td><td>Inside lead details</td></tr>
+        <tr><td>Media</td><td>Upload hero image &amp; gallery photos</td><td>🖼️ Media</td></tr>
+        <tr><td>Analytics</td><td>Booking funnel conversion events</td><td>📈 Analytics</td></tr>
+        <tr><td>Artisan terminal</td><td>Run deployment commands without SSH</td><td>🖥️ Terminal</td></tr>
+        <tr><td>Settings</td><td>WhatsApp, socials, SMTP, Midtrans, branding, users</td><td>⚙️ Settings</td></tr>
+      </table>
+
+      <div class="note"><span class="nb">💡 Info</span>This manual is reachable from the admin menu. Use the search box in the left sidebar to jump straight to any topic.</div>
+    </section>
+
+    <!-- ============ 2. GLOSSARY ============ -->
+    <section id="glossary">
+      <div class="sec-head"><div class="num">2</div><h2 class="sec-title">Key Terms</h2></div>
+      <p class="sec-sub">Vocabulary used throughout this manual.</p>
+
+      <table>
+        <tr><th>Term</th><th>Meaning</th></tr>
+        <tr><td><b>Lead</b></td><td>A prospective customer who filled in the booking form on the website. Can be complete (finished) or partial (halfway).</td></tr>
+        <tr><td><b>Reference</b></td><td>The lead's unique number, format <code>KR-0001</code>, <code>KR-0002</code>, etc. Shown to the customer as proof of enquiry.</td></tr>
+        <tr><td><b>Partial lead</b></td><td>A lead that stopped midway through the steps (not submitted). Still auto-saved for follow-up.</td></tr>
+        <tr><td><b>Available</b> <span class="badge b-green">🟢</span></td><td>Date is still open and bookable.</td></tr>
+        <tr><td><b>Enquiry</b> <span class="badge b-yellow">🟡</span></td><td>Someone has already asked about this date (booking not final yet).</td></tr>
+        <tr><td><b>Booked</b> <span class="badge b-red">🔴</span></td><td>Date is already booked / unavailable.</td></tr>
+        <tr><td><b>Deposit</b></td><td>First payment (down payment) that locks in the date.</td></tr>
+        <tr><td><b>Balance</b></td><td>The remaining payment after the deposit.</td></tr>
+        <tr><td><b>Starting price</b></td><td>A package's public starting price, visible before any negotiation.</td></tr>
+        <tr><td><b>Free event</b></td><td>Market/festival/community event — no upfront fee, minimum guarantee system.</td></tr>
+      </table>
+    </section>
+
+    <!-- ============ 3. LOGIN ============ -->
+    <section id="login">
+      <div class="sec-head"><div class="num">3</div><h2 class="sec-title">Login &amp; Forgot Password</h2></div>
+      <p class="sec-sub">How to enter the admin panel and recover your account.</p>
+
+      <h3>3.1 — Signing In</h3>
+      <ol class="steps">
+        <li><b>Open the login page</b>Navigate to <code>/login</code> in your browser (e.g. <code>https://yourdomain.com/login</code>).</li>
+        <li><b>Enter email &amp; password</b>Use a registered staff account. The eye button <span class="badge b-brown">👁</span> next to the password field lets you peek at what you typed.</li>
+        <li><b>Click Sign in</b>On success you are redirected to <code>/admin</code> (Dashboard).</li>
+      </ol>
+
+      <h3>3.2 — Forgot Password</h3>
+      <ol class="steps">
+        <li><b>Click "Forgot password?"</b>On the login page, click the link below the form.</li>
+        <li><b>Enter your email</b>The system sends a reset link in a fully branded Kopi Rider e-mail.</li>
+        <li><b>Open the e-mail &amp; click the reset button</b>The link is <b>signed, single-use</b> and <b>expires after 60 minutes</b>.</li>
+        <li><b>Set a new password</b>Then simply sign in with the new password.</li>
+      </ol>
+
+      <div class="note warn"><span class="nb">⚠️ Important</span>Reset links are valid for 60 minutes only. If it expires, just request a new one. Check the spam folder if the e-mail doesn't arrive.</div>
+
+      <div class="note"><span class="nb">💡 Change password while logged in</span>Already signed in? Change your password via <b>Settings → 🔐 Change password</b> (see chapter 12).</div>
+    </section>
+
+    <!-- ============ 4. DASHBOARD ============ -->
+    <section id="dashboard">
+      <div class="sec-head"><div class="num">4</div><h2 class="sec-title">Dashboard</h2></div>
+      <p class="sec-sub">Your business at a glance — the first page after login.</p>
+
+      <p>The Dashboard (<code>/admin</code>) shows a quick snapshot of business health. It's the starting point every time you open the panel:</p>
+
+      <div class="card">
+        <ul>
+          <li><b>📊 Lead statistics</b> — how many leads came in (complete &amp; partial) in the selected period.</li>
+          <li><b>💰 Revenue</b> — total confirmed payments (paid) from deposits + balances.</li>
+          <li><b>📅 Booked days</b> — how many days are already booked on the calendar.</li>
+          <li><b>Recent activity</b> — the newest incoming leads so nothing gets missed.</li>
+        </ul>
+      </div>
+
+      <h3>Suggested Daily Routine</h3>
+      <ol>
+        <li>Open <b>Dashboard</b> → check today's new leads.</li>
+        <li>Open <b>Leads</b> → process leads with status <span class="badge b-brown">new</span> (see chapter 5).</li>
+        <li>After a deal → set status to <span class="badge b-green">confirmed</span>, mark the date <span class="badge b-red">booked</span> in Calendar, and record the deposit in Payments.</li>
+      </ol>
+    </section>
+
+    <!-- ============ 5. LEADS ============ -->
+    <section id="leads">
+      <div class="sec-head"><div class="num">5</div><h2 class="sec-title">Leads — Prospective Customers</h2></div>
+      <p class="sec-sub">The operational heart: manage every enquiry from arrival to deal (or lost).</p>
+
+      <h3>5.1 — Leads List</h3>
+      <p>Open <b>📝 Leads</b> in the sidebar. The table shows every lead with its reference, name, event date, event type, package and status. Filters are available at the top:</p>
+      <table>
+        <tr><th>Filter</th><th>Use</th></tr>
+        <tr><td><b>Status</b></td><td>new / contacted / negotiating / confirmed / lost</td></tr>
+        <tr><td><b>Complete</b></td><td>Only complete leads, only partial, or all</td></tr>
+        <tr><td><b>Search</b></td><td>Find by name, WhatsApp number or reference (e.g. <code>KR-0012</code>)</td></tr>
+      </table>
+
+      <h3>5.2 — Status Workflow</h3>
+      <p>Every lead moves through the pipeline below. Change the status from the lead detail page.</p>
+      <div class="flow">
+        <span class="f">new</span><span class="arrow">→</span>
+        <span class="f">contacted</span><span class="arrow">→</span>
+        <span class="f">negotiating</span><span class="arrow">→</span>
+        <span class="f" style="border-color:#2F7D4F;color:#2F7D4F;">confirmed ✓</span>
+        <span style="color:#7A6A58;font-size:12px;font-weight:600;">&nbsp;or&nbsp;</span>
+        <span class="f" style="border-color:#A6382E;color:#A6382E;">lost ✕</span>
+      </div>
+      <table>
+        <tr><th>Status</th><th>Meaning</th><th>Your action</th></tr>
+        <tr><td><span class="badge b-brown">new</span></td><td>Just came in, not yet contacted</td><td>Open WhatsApp &amp; greet the customer</td></tr>
+        <tr><td><span class="badge b-yellow">contacted</span></td><td>Contacted, waiting for a reply</td><td>Follow up if they go quiet</td></tr>
+        <tr><td><span class="badge b-brown">negotiating</span></td><td>Negotiating package/price/date</td><td>Agree on details &amp; send the offer</td></tr>
+        <tr><td><span class="badge b-green">confirmed</span></td><td>Deal! Booking is final</td><td>Set the date to <span class="badge b-red">booked</span>, record payments</td></tr>
+        <tr><td><span class="badge b-red">lost</span></td><td>Cancelled / didn't happen</td><td>Optionally note the reason</td></tr>
+      </table>
+
+      <h3>5.3 — Lead Detail Page</h3>
+      <p>Click any lead to open its details. Here you can:</p>
+      <ul>
+        <li><b>See the full enquiry data</b> — date, event type, guest count, chosen package, and the generated WhatsApp message.</li>
+        <li><b>Open WhatsApp chat</b> — a one-click button that opens a chat with the customer using a pre-written message.</li>
+        <li><b>Change the status</b> — following the workflow above.</li>
+        <li><b>Manage Payments</b> — record deposits &amp; balances (see chapter 7).</li>
+        <li><b>Delete the lead</b> — only when truly necessary (lead data is valuable, think twice).</li>
+      </ul>
+
+      <div class="note tip"><span class="nb">✅ Best practice</span>Respond to <span class="badge b-brown">new</span> leads within 24 hours. Reply speed is the single biggest conversion factor for event businesses.</div>
+
+      <div class="note"><span class="nb">💡 Partial leads</span>Partial leads (customer quit the form midway) still appear in the list. The data already captured (e.g. date + event type) is enough for a proactive WhatsApp follow-up.</div>
+    </section>
+
+    <!-- ============ 6. CALENDAR ============ -->
+    <section id="calendar">
+      <div class="sec-head"><div class="num">6</div><h2 class="sec-title">Calendar — Availability</h2></div>
+      <p class="sec-sub">Control which dates are open for booking on the website.</p>
+
+      <h3>6.1 — How It Works</h3>
+      <p>Open <b>📅 Calendar</b>. The calendar shows each date's status. Click any date to change it — saving is <b>instant</b> (no save button).</p>
+      <table>
+        <tr><th>Status</th><th>Symbol</th><th>Effect on the website</th></tr>
+        <tr><td>Available</td><td><span class="badge b-green">🟢</span></td><td>Customers can pick this date</td></tr>
+        <tr><td>Enquiry</td><td><span class="badge b-yellow">🟡</span></td><td>Shows as "someone is asking" — customers can still enquire but know someone else asked first</td></tr>
+        <tr><td>Booked</td><td><span class="badge b-red">🔴</span></td><td>Date is locked and cannot be picked</td></tr>
+      </table>
+
+      <div class="note"><span class="nb">💡 Automatic</span>When a customer requests a date through the booking form, that date automatically turns <span class="badge b-yellow">🟡 enquiry</span> on the public calendar — no action needed from you.</div>
+
+      <h3>6.2 — Per-Date Notes</h3>
+      <p>Every date can carry an internal note (e.g. "PT ABC EVENT — deposit due 20 Sep"). Notes are never visible to customers, only in the admin panel.</p>
+
+      <h3>6.3 — When to Change Status Manually</h3>
+      <ul>
+        <li>Lead <span class="badge b-green">confirmed</span> → set the date to <span class="badge b-red">booked</span> <b>+</b> record payments.</li>
+        <li>Private event / truck maintenance → set <span class="badge b-red">booked</span> directly so no enquiries come in.</li>
+        <li>Enquiry cancelled / negotiation failed → set it back to <span class="badge b-green">available</span>.</li>
+      </ul>
+    </section>
+
+    <!-- ============ 7. PAYMENTS ============ -->
+    <section id="payments">
+      <div class="sec-head"><div class="num">7</div><h2 class="sec-title">Payments &amp; Midtrans</h2></div>
+      <p class="sec-sub">Record deposits &amp; balances, send payment links, or use bank transfer.</p>
+
+      <h3>7.1 — Concept</h3>
+      <p>Payments are recorded <b>per lead</b> (not per package). Each lead can have up to two records:</p>
+      <table>
+        <tr><th>Type</th><th>Function</th><th>When to use</th></tr>
+        <tr><td><b>Deposit</b></td><td>Down payment that locks the date</td><td>At deal time / status confirmed</td></tr>
+        <tr><td><b>Balance</b></td><td>Remaining settlement</td><td>Before or on the event day</td></tr>
+      </table>
+      <p>Each payment has a status: <span class="badge b-yellow">pending</span> → <span class="badge b-green">paid</span>.</p>
+
+      <h3>7.2 — Adding a Payment</h3>
+      <ol class="steps">
+        <li><b>Open the lead detail page</b>Leads → click the intended lead.</li>
+        <li><b>Scroll to the Payments section</b>Choose the type (deposit/balance), enter the amount and method.</li>
+        <li><b>Save</b>The record appears with status <span class="badge b-yellow">pending</span>.</li>
+        <li><b>Generate a payment link (optional)</b>For the Midtrans method, click <b>Generate link</b> — the system creates a payment link you can send to the customer.</li>
+        <li><b>Mark as paid once the money arrives</b>Change the status to <span class="badge b-green">paid</span> after confirmation (automatically via the Midtrans webhook, or manually).</li>
+      </ol>
+
+      <h3>7.3 — Midtrans vs Bank Transfer</h3>
+      <table>
+        <tr><th></th><th>Midtrans (payment link)</th><th>Bank transfer (manual)</th></tr>
+        <tr><td>Flow</td><td>Link sent to customer → pays (VA, QRIS, card, e-wallet) → webhook updates status automatically</td><td>You send the account number → check the mutation → mark paid manually</td></tr>
+        <tr><td>Best for</td><td>Most customers</td><td>Customers who don't use digital methods</td></tr>
+        <tr><td>Setup</td><td>Settings → 💳 Payments (see chapter 12.2)</td><td>None</td></tr>
+      </table>
+
+      <div class="note"><span class="nb">💡 Midtrans webhook</span>Payment notifications are sent by Midtrans to <code>/api/midtrans/notification</code>. As long as the credentials are correct, payment status flips to paid automatically without manual input.</div>
+
+      <div class="note warn"><span class="nb">⚠️ Don't mark paid prematurely</span>For manual bank transfers, always verify the account mutation before switching the status to paid.</div>
+    </section>
+
+    <!-- ============ 8. PACKAGES ============ -->
+    <section id="packages">
+      <div class="sec-head"><div class="num">8</div><h2 class="sec-title">Packages</h2></div>
+      <p class="sec-sub">Manage the packages shown on the website, including starting prices and features.</p>
+
+      <h3>8.1 — List &amp; Creating Packages</h3>
+      <p>Open <b>💼 Packages</b>. Click <b>Add package</b> to create a new one, or <b>Edit</b> on an existing package. Fields to fill in:</p>
+      <table>
+        <tr><th>Field</th><th>Description</th></tr>
+        <tr><td><b>Name</b></td><td>Package name (shown on the website)</td></tr>
+        <tr><td><b>Slug</b></td><td>URL identifier, lowercase + dashes (auto-generated from the name)</td></tr>
+        <tr><td><b>Description</b></td><td>Short package description</td></tr>
+        <tr><td><b>Starting price</b></td><td>Public starting price — customers see the price before having to chat</td></tr>
+        <tr><td><b>Currency</b></td><td>IDR (default) or others</td></tr>
+        <tr><td><b>Features</b></td><td>Feature list (one per line) displayed as bullets</td></tr>
+        <tr><td><b>Audience</b></td><td><span class="badge b-brown">paid</span> for paid events · <span class="badge b-green">free</span> for market/festival/community</td></tr>
+        <tr><td><b>Active</b></td><td>Active packages appear on the website; inactive = hidden without deleting</td></tr>
+        <tr><td><b>Sort order</b></td><td>Display order on the website (small → large)</td></tr>
+      </table>
+
+      <h3>8.2 — "Free" Packages (Free Events)</h3>
+      <p>Packages with the <span class="badge b-green">free</span> audience are shown in the booking flow when the customer picks a market/festival/community event type, together with the free-option explanation and the minimum guarantee. The price displays as <b>"No upfront fee"</b>.</p>
+
+      <div class="note tip"><span class="nb">✅ Content tips</span>Use a realistic but attractive starting price — it's what makes customers comfortable continuing to WhatsApp. Adjust sort order so your best package appears on top.</div>
+    </section>
+
+    <!-- ============ 9. MEDIA ============ -->
+    <section id="media">
+      <div class="sec-head"><div class="num">9</div><h2 class="sec-title">Media — Hero &amp; Gallery</h2></div>
+      <p class="sec-sub">Upload photos for the homepage and website gallery.</p>
+
+      <h3>9.1 — Uploading</h3>
+      <ol class="steps">
+        <li><b>Open 🖼️ Media</b> in the admin sidebar.</li>
+        <li><b>Pick a file</b> — hero image (main landing-page photo) and/or gallery photos.</li>
+        <li><b>Upload</b> — files are stored on the <code>public</code> disk and appear on the website immediately.</li>
+      </ol>
+
+      <h3>9.2 — Managing Gallery Photos</h3>
+      <ul>
+        <li><b>Toggle</b> — hide/show a photo without deleting it (e.g. seasonal photos).</li>
+        <li><b>Delete</b> — permanently remove it from storage.</li>
+        <li>The website gallery <b>lazy-loads</b> — stays fast even with 30+ photos.</li>
+      </ul>
+
+      <div class="note"><span class="nb">💡 Gallery philosophy</span>The gallery intentionally starts empty (no fake stock photos). Fill it gradually with real event photos — authenticity sells.</div>
+
+      <div class="note warn"><span class="nb">⚠️ Photos not showing after upload?</span>Run <code>storage:link</code> from the <b>🖥️ Terminal</b> menu (chapter 11). This creates the <code>public/storage</code> symlink required for files to be visible on the web.</div>
+    </section>
+
+    <!-- ============ 10. ANALYTICS ============ -->
+    <section id="analytics">
+      <div class="sec-head"><div class="num">10</div><h2 class="sec-title">Analytics</h2></div>
+      <p class="sec-sub">The booking conversion funnel — see exactly where customers drop off.</p>
+
+      <p>Open <b>📈 Analytics</b>. This page shows the <b>conversion funnel</b> built from tracking events wired into the booking flow:</p>
+      <div class="flow">
+        <span class="f">Open form</span><span class="arrow">→</span>
+        <span class="f">Pick date</span><span class="arrow">→</span>
+        <span class="f">Pick type &amp; guests</span><span class="arrow">→</span>
+        <span class="f">View packages</span><span class="arrow">→</span>
+        <span class="f">Enter contact</span><span class="arrow">→</span>
+        <span class="f" style="border-color:#2F7D4F;color:#2F7D4F;">Submit + WhatsApp</span>
+      </div>
+      <p>Events are sent automatically by the website to the <code>/api/analytics</code> endpoint every time a customer completes a step.</p>
+
+      <h3>How to Read It</h3>
+      <ul>
+        <li><b>A big drop at one step</b> → that step has a problem (too complicated, unclear pricing, etc.) — fix it before driving more traffic.</li>
+        <li><b>Many submits but WhatsApp never opens</b> → check the message preview / WhatsApp number in Settings.</li>
+        <li>Use this data for content decisions: photos, starting prices, package order.</li>
+      </ul>
+    </section>
+
+    <!-- ============ 11. TERMINAL ============ -->
+    <section id="terminal">
+      <div class="sec-head"><div class="num">11</div><h2 class="sec-title">Terminal — Artisan Without SSH</h2></div>
+      <p class="sec-sub">Run deployment commands straight from the admin panel.</p>
+
+      <p>Open <b>🖥️ Terminal</b>. From here you can run Laravel artisan commands without SSH access to the server — handy on shared/managed hosting.</p>
+
+      <h3>11.1 — Quick Commands</h3>
+      <table>
+        <tr><th>Command</th><th>When to use</th></tr>
+        <tr><td><code>migrate --force</code></td><td>After an app update — apply new database migrations</td></tr>
+        <tr><td><code>storage:link</code></td><td>Uploaded photos not visible on the web → create/recreate the storage symlink</td></tr>
+        <tr><td><code>optimize</code></td><td>After big changes — cache config, routes &amp; views for speed</td></tr>
+        <tr><td><code>optimize:clear</code></td><td>Changes not visible on the web → flush all caches</td></tr>
+        <tr><td><code>migrate:status</code></td><td>Check which migrations have/haven't run</td></tr>
+        <tr><td><code>cache:clear</code> / <code>config:clear</code></td><td>Clear a specific cache</td></tr>
+        <tr><td><code>route:list</code></td><td>List every registered URL</td></tr>
+        <tr><td><code>about</code></td><td>Laravel, PHP &amp; environment version info</td></tr>
+      </table>
+
+      <h3>11.2 — Free Input</h3>
+      <p>Type any artisan command in the input box (no <code>php artisan</code> prefix needed) and press <kbd>Enter</kbd> or click <b>Run</b>. Command history can be recalled with <kbd>↑</kbd> / <kbd>↓</kbd>. Examples:</p>
+      <div class="term"><span class="p">$</span> migrate --force<br><span class="p">$</span> config:cache</div>
+
+      <div class="note danger"><span class="nb">🛡️ Safety</span>
+        Only artisan commands are accepted. Interactive/long-running commands (<code>tinker</code>, <code>serve</code>, <code>queue:work</code>) are blocked, and destructive ones (<code>migrate:fresh</code>, <code>db:wipe</code>) ask for confirmation. Commands run inside the PHP process (<code>Artisan::call()</code>) — compatible with hostings that disable <code>exec</code>.
+      </div>
+    </section>
+
+    <!-- ============ 12. SETTINGS ============ -->
+    <section id="settings">
+      <div class="sec-head"><div class="num">12</div><h2 class="sec-title">Settings</h2></div>
+      <p class="sec-sub">All application configuration on one page.</p>
+
+      <h3>12.1 — 🌐 General</h3>
+      <ul>
+        <li><b>WhatsApp number</b> — the destination number for all enquiries (international format without <code>+</code>, e.g. <code>6281234567890</code>). <b>Important:</b> this number powers the booking buttons across the whole website.</li>
+        <li><b>Instagram / TikTok URL</b> — social links in the footer &amp; social section.</li>
+        <li><b>Hero badge text</b> — small text on the landing-page hero badge.</li>
+      </ul>
+
+      <h3>12.2 — 💳 Payments (Midtrans)</h3>
+      <ul>
+        <li>Fill in the <b>Server Key</b>, <b>Client Key</b> and <b>Sandbox / Production</b> mode from your Midtrans dashboard.</li>
+        <li>These keys power the <b>Generate link</b> button on payments (chapter 7).</li>
+      </ul>
+
+      <h3>12.3 — 📧 E-mail (SMTP)</h3>
+      <ul>
+        <li>Full configuration: host, port, TLS/SSL encryption, username, password, from-address &amp; name.</li>
+        <li>Credentials are stored in the database and applied <b>at runtime</b> — no <code>.env</code> editing or redeploy needed.</li>
+        <li>Saving with an empty password field <b>does not</b> wipe the old password (anti-frustration).</li>
+        <li>Use the <b>📨 Send a test e-mail</b> button to verify — a fully branded test e-mail is sent to the From address.</li>
+      </ul>
+      <div class="note"><span class="nb">💡 E-mail template</span>Every e-mail (password reset, tests, future notifications) uses one template: logo header on dark brown, gold divider, cream content card, CTA button and a footer with social links. The logo is embedded inline (<code>cid:</code>) so it displays even when the mail client blocks remote images.</div>
+
+      <h3>12.4 — 📄 Legal Pages</h3>
+      <p>Edit the Privacy Policy and Terms &amp; Conditions content shown at <code>/privacy-policy</code> and <code>/terms-and-conditions</code>.</p>
+
+      <h3>12.5 — 🖼️ Logo &amp; Favicon</h3>
+      <p>Upload your own logo and favicon to replace the defaults. Applies instantly across the website, admin panel and e-mails.</p>
+
+      <h3>12.6 — 🔐 Change Password</h3>
+      <ol>
+        <li>Enter your current password, then the new password twice.</li>
+        <li>Save — the next login uses the new password.</li>
+      </ol>
+
+      <h3>12.7 — 👥 Staff Users</h3>
+      <ul>
+        <li><b>Add staff</b> — fill in name, email, password; they can sign in immediately.</li>
+        <li><b>Change role</b> — promote/demote a user.</li>
+        <li><b>Delete user</b> — revoke panel access.</li>
+      </ul>
+      <div class="note warn"><span class="nb">⚠️ Safe practice</span>Only create accounts for people who actually operate the panel. Delete staff accounts as soon as they become inactive.</div>
+    </section>
+
+    <!-- ============ 13. CUSTOMER SIDE ============ -->
+    <section id="sisi-customer">
+      <div class="sec-head"><div class="num">13</div><h2 class="sec-title">Customer Side — Public Website</h2></div>
+      <p class="sec-sub">Understand what customers see so you can answer their questions.</p>
+
+      <h3>13.1 — Public Pages</h3>
+      <table>
+        <tr><th>Page</th><th>URL</th><th>Contents</th></tr>
+        <tr><td>Landing</td><td><code>/</code></td><td>Hero (photo/video slot), packages with starting prices, "Why us", social section</td></tr>
+        <tr><td>Check your date</td><td><code>/check-date</code></td><td>Standalone booking flow (also opens as an overlay from any page)</td></tr>
+        <tr><td>Packages</td><td><code>/packages</code></td><td>All packages + starting prices before anyone has to chat</td></tr>
+        <tr><td>Free events</td><td><code>/free-events</code></td><td>Explains the free option + minimum guarantee — link it straight to organisers</td></tr>
+        <tr><td>Gallery</td><td><code>/gallery</code></td><td>Photo gallery (lazy-loaded, grows as you upload)</td></tr>
+      </table>
+
+      <h3>13.2 — Customer Booking Flow</h3>
+      <ol class="steps">
+        <li><b>Pick a date</b>Live calendar: 🟢 available · 🟡 someone is asking · 🔴 booked. Taps answer instantly.</li>
+        <li><b>Event type + guest range</b>Buttons only — no typing.</li>
+        <li><b>Dynamic step</b>Paid events → packages with starting prices. Market/festival/community → the free-option explanation.</li>
+        <li><b>Contact</b>Name + WhatsApp number, with a preview of a naturally pre-written message.</li>
+        <li><b>Submit → WhatsApp</b>The lead is saved first (customer receives reference <code>KR-XXXX</code>), then WhatsApp opens with a ready-to-send message.</li>
+      </ol>
+
+      <div class="note tip"><span class="nb">✅ Why it works this way</span>The customer sees a reference number = proof of an official enquiry. You get complete data even if the WhatsApp chat never happens.</div>
+    </section>
+
+    <!-- ============ 14. WORKFLOW ============ -->
+    <section id="workflow">
+      <div class="sec-head"><div class="num">14</div><h2 class="sec-title">Complete End-to-End Workflow</h2></div>
+      <p class="sec-sub">From the customer's first click to the event day — with the admin's role at every stage.</p>
+
+      <ol class="steps">
+        <li><b>Customer fills in the website form</b>Date → event type → guests → package → contact. Partial leads are auto-saved at every step.</li>
+        <li><b>Lead arrives in the panel (status: new)</b>The requested date automatically turns 🟡 enquiry on the public calendar.</li>
+        <li><b>Admin opens WhatsApp &amp; greets</b>From the lead detail: click <b>Open WhatsApp chat</b>. Change status → <span class="badge b-yellow">contacted</span>.</li>
+        <li><b>Negotiation</b>Agree on package, final price and details. Status → <span class="badge b-brown">negotiating</span>.</li>
+        <li><b>Deal</b>Status → <span class="badge b-green">confirmed</span>. Set the date to <span class="badge b-red">booked</span> in Calendar (+ internal notes).</li>
+        <li><b>Deposit</b>Add a deposit payment on the lead detail → generate a Midtrans payment link (or send bank details). Mark <span class="badge b-green">paid</span> when funds arrive.</li>
+        <li><b>Preparation &amp; documentation</b>Upload event photos to Media afterwards — the gallery grows and the website gets stronger.</li>
+        <li><b>Balance</b>Collect the settlement (record balance, mark paid once received).</li>
+      </ol>
+    </section>
+
+    <!-- ============ 15. FAQ ============ -->
+    <section id="faq">
+      <div class="sec-head"><div class="num">15</div><h2 class="sec-title">FAQ &amp; Troubleshooting</h2></div>
+      <p class="sec-sub">Common problems and their solutions.</p>
+
+      <h3>A customer says WhatsApp didn't open after submitting — is anything lost?</h3>
+      <p><b>Nothing is lost.</b> The lead was saved before the redirect. Find the customer's reference number (<code>KR-XXXX</code>) in the Leads menu, then contact them via the WhatsApp number on record.</p>
+
+      <h3>Uploaded photos don't appear on the website</h3>
+      <p>Open <b>Terminal</b> → run <code>storage:link</code>. If it still doesn't work, run <code>optimize:clear</code> then refresh the page (hard refresh: <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>R</kbd>).</p>
+
+      <h3>Password reset e-mails are not being sent</h3>
+      <ol>
+        <li>Check <b>Settings → 📧 SMTP</b> — click <b>Send a test e-mail</b> to verify.</li>
+        <li>Ask the customer to check their spam folder.</li>
+        <li>SMTP changes apply at runtime — no redeploy needed.</li>
+      </ol>
+
+      <h3>Admin changes are not visible on the website</h3>
+      <p>Cache. Open <b>Terminal</b> → <code>optimize:clear</code>. Once everything is stable, run <code>optimize</code> to re-enable the performance cache.</p>
+
+      <h3>A Midtrans payment doesn't flip to paid automatically</h3>
+      <ol>
+        <li>Make sure the Server Key/Client Key &amp; mode in <b>Settings → 💳 Payments</b> are correct.</li>
+        <li>Make sure Midtrans notifications point to <code>https://yourdomain.com/api/midtrans/notification</code>.</li>
+        <li>In the meantime, mark paid manually after verifying the funds arrived.</li>
+      </ol>
+
+      <h3>A date is deal-confirmed but still green on the website</h3>
+      <p>Booked status is not automatic from lead confirmation — set it manually in <b>Calendar</b> (click the date → booked). This gives you full control over availability.</p>
+
+      <h3>Admin password forgotten</h3>
+      <p>Use <b>Forgot password?</b> on the login page (chapter 3.2). If e-mail is also broken, have another staff member create/reset your account via <b>Settings → 👥 Staff users</b>.</p>
+
+      <div class="note"><span class="nb">📞 Need technical help?</span>Contact the developer: <a href="https://digimagine.web.id" target="_blank" rel="noopener">Digimagine</a>.</div>
+    </section>
+
+    <footer style="border-top:1px solid var(--line);padding-top:22px;color:var(--muted);font-size:13px;">
+      © 2026 Kopi Rider — Manual Book v1.0 (EN) · Developed by <a href="https://digimagine.web.id" target="_blank" rel="noopener">Digimagine</a> · This document is optimised for screen &amp; print.
+    </footer>
+  </main>
+</div>
+
+<button class="menu-btn" id="menuBtn" aria-label="Open table of contents">☰</button>
+<button id="toTop" aria-label="Back to top">↑</button>
+
+<script>
+(function () {
+  // ---- TOC search filter ----
+  var input = document.getElementById('tocSearch');
+  var links = Array.prototype.slice.call(document.querySelectorAll('.toc a'));
+  var groups = Array.prototype.slice.call(document.querySelectorAll('.toc-group'));
+  input.addEventListener('input', function () {
+    var q = this.value.trim().toLowerCase();
+    links.forEach(function (a) {
+      var hit = !q || a.textContent.toLowerCase().indexOf(q) !== -1
+        || (a.getAttribute('href') || '').toLowerCase().indexOf(q) !== -1;
+      a.classList.toggle('hidden', !hit);
+    });
+    groups.forEach(function (g) { g.classList.remove('hidden'); });
+  });
+
+  // ---- active section highlight ----
+  var sections = links.map(function (a) { return document.querySelector(a.getAttribute('href')); }).filter(Boolean);
+  function onScroll() {
+    var pos = window.scrollY + 120, idx = 0;
+    sections.forEach(function (s, i) { if (s.offsetTop <= pos) idx = i; });
+    links.forEach(function (a) { a.classList.remove('active'); });
+    if (sections[idx]) links[idx].classList.add('active');
+
+    var top = document.getElementById('toTop');
+    top.classList.toggle('show', window.scrollY > 500);
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // ---- to top ----
+  document.getElementById('toTop').addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // ---- mobile drawer ----
+  var body = document.body;
+  document.getElementById('menuBtn').addEventListener('click', function () { body.classList.toggle('toc-open'); });
+  document.getElementById('backdrop').addEventListener('click', function () { body.classList.remove('toc-open'); });
+  links.forEach(function (a) { a.addEventListener('click', function () { body.classList.remove('toc-open'); }); });
+})();
+</script>
+</body>
+</html>

@@ -41,6 +41,22 @@ Built with **Laravel 11** (targets **PHP 8.2+**) and the light, This is **not** 
 
 ### Login
 - Staff login at `/login` with a **password peek toggle** (eye button) — see what you typed before submitting.
+- **Forgot password** — `/forgot-password` sends a reset link in a **branded HTML e-mail** (logo header, CTA button, footer). Links are **signed and expire after 60 minutes**, single-use token.
+
+### Artisan terminal (`/admin/terminal`)
+Run deployment commands from the admin panel — no SSH access needed:
+- `migrate --force` — apply new migrations after a feature update
+- `storage:link` — re/create the `public/storage` symlink
+- `optimize` / `optimize:clear` — cache (or flush) config, routes & views
+- Plus quick buttons for `migrate:status`, `cache:clear`, `config:clear`, `route:list` and a free-input prompt with ↑/↓ history.
+
+**Safety:** only artisan commands are accepted and executed **inside the PHP process** (`Artisan::call()` — works even on hostings that disable `proc_open`/`exec`), with automatic fallbacks to a separate process (`proc_open`) and escaped shell functions. Only authenticated staff can reach it, interactive/long-running commands (`tinker`, `serve`, `queue:work`, …) are blocked and destructive ones (`migrate:fresh`, `db:wipe`, …) ask for confirmation.
+
+### E-mail — SMTP (Settings → E-mail/SMTP)
+- Full SMTP configuration managed from the admin panel: host, port, TLS/SSL, username, password (never wiped by an empty save), from-address & name.
+- Credentials are applied at **runtime** (`AppServiceProvider`) and stored in the database — no `.env` editing or redeploy needed.
+- **Send test e-mail** button verifies the setup with a branded HTML message.
+- All e-mails (reset password, tests, future notifications) use one template: logo header on dark brown, gold divider, cream content card, CTA button and a footer with WhatsApp/social links. The logo is **embedded inline** (`cid:`) so it displays even when the mail client blocks remote images.
 
 ### Analytics events tracked (`/api/analytics`)
 `booking_flow_opened` → `date_selected` → `event_type_selected` → `guest_range_selected` → `package_viewed` → `package_selected` → `contact_screen_viewed` → `lead_submitted` → `whatsapp_opened`

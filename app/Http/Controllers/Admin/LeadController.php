@@ -61,4 +61,23 @@ class LeadController extends Controller
 
         return back()->with('success', 'Lead '.$lead->reference.' updated.');
     }
+
+    /**
+     * Delete a lead and its payment records — super admin only.
+     */
+    public function destroy(Request $request, Lead $lead)
+    {
+        abort_unless($request->user()->isSuperAdmin(), 403, 'Only super admins can delete leads.');
+
+        $reference = $lead->reference;
+        $paymentCount = $lead->payments()->count();
+
+        // Remove dependent payment records first (no FK cascade configured).
+        $lead->payments()->delete();
+        $lead->delete();
+
+        return redirect()
+            ->route('admin.leads.index')
+            ->with('success', "Lead {$reference} deleted".($paymentCount ? " together with {$paymentCount} payment record(s)" : '').'.');
+    }
 }

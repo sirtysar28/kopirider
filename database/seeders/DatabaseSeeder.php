@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
         // ---- Admin account ----
         User::updateOrCreate(
             ['email' => 'admin@kopirider.id'],
-            ['name' => 'Kopi Rider Admin', 'password' => bcrypt('kopirider123')],
+            ['name' => 'Kopi Rider Admin', 'password' => bcrypt('kopirider123'), 'role' => User::ROLE_SUPERADMIN],
         );
 
         // ---- Settings ----

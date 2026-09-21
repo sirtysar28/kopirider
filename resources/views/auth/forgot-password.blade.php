@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#F6ECD9">
-  <title>Staff login — Kopi Rider</title>
+  <title>Forgot password — Kopi Rider</title>
   @if (has_custom_favicon())
     <link rel="icon" href="{{ favicon_url() }}">
   @else
@@ -40,26 +40,12 @@
     .sub { color: #7C6650; font-size: 14px; margin-bottom: 24px; }
     .field { margin-bottom: 16px; }
     .field label { display: block; font-size: 13px; font-weight: 700; color: #5E2A16; margin-bottom: 6px; }
-    .input-wrap { position: relative; }
     .input-wrap input {
-      width: 100%; padding: 14px 52px 14px 18px; border-radius: 60px;
+      width: 100%; padding: 14px 18px; border-radius: 60px;
       border: 1px solid #E4D2A8; font-size: 15px; font-family: inherit;
       background: #FDFBF6; color: #2A1B12; transition: border-color .2s, box-shadow .2s;
     }
     .input-wrap input:focus { outline: none; border-color: #8B4226; box-shadow: 0 0 0 3px rgba(139,66,38,.15); }
-    /* ---- the password peek toggle ---- */
-    .peek-btn {
-      position: absolute; right: 7px; top: 50%; transform: translateY(-50%);
-      width: 38px; height: 38px; border-radius: 50%; border: none; cursor: pointer;
-      background: #EFE0BE; color: #5E2A16; display: grid; place-items: center;
-      transition: background .2s, transform .2s; padding: 0;
-    }
-    .peek-btn:hover { background: #E4D2A8; transform: scale(1.06); }
-    .peek-btn:active { transform: scale(.94); }
-    .peek-btn svg { width: 19px; height: 19px; }
-    .peek-btn .eye-off { display: none; }
-    .peek-btn.showing .eye-on { display: none; }
-    .peek-btn.showing .eye-off { display: block; }
     .btn {
       width: 100%; min-height: 52px; border-radius: 100px; border: 1px solid #8B4226;
       background: #8B4226; color: #fff; font-weight: 700; font-size: 15px;
@@ -68,19 +54,17 @@
       box-shadow: 0 10px 24px -16px rgba(42,27,18,.35);
     }
     .btn:hover { background: #5E2A16; transform: translateY(-2px); }
-    .remember { display: flex; align-items: center; gap: 8px; font-size: 13.5px; color: #7C6650; margin: 4px 0 2px; }
-    .remember input { accent-color: #8B4226; width: 16px; height: 16px; cursor: pointer; }
     .error-box {
       background: #F9E3DC; border: 1px solid #D98E76; color: #8B4226;
       border-radius: 14px; padding: 11px 16px; font-size: 13.5px; margin-bottom: 16px;
       animation: shake .45s ease;
     }
-    @keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
     .ok-box {
       background: #E7EBD8; border: 1px solid #B9C69F; color: #41522E;
       border-radius: 14px; padding: 11px 16px; font-size: 13.5px; margin-bottom: 16px;
       line-height: 1.5;
     }
+    @keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
     .backlink { display: block; text-align: center; margin-top: 18px; font-size: 13px; color: #A6906F; text-decoration: none; }
     .backlink:hover { color: #8B4226; }
     .dev-credit { text-align: center; margin-top: 10px; font-size: 12.5px; color: #A6906F; }
@@ -98,8 +82,8 @@
       </div>
     </a>
 
-    <h1>Welcome back</h1>
-    <p class="sub">Sign in to manage the calendar, leads and payments.</p>
+    <h1>Forgot password?</h1>
+    <p class="sub">Enter your staff e-mail and we'll send you a reset link.</p>
 
     @if ($errors->any())
       <div class="error-box">{{ $errors->first() }}</div>
@@ -109,7 +93,7 @@
       <div class="ok-box">📬 {{ session('status') }}</div>
     @endif
 
-    <form method="POST" action="{{ route('login.attempt') }}">
+    <form method="POST" action="{{ route('password.email') }}">
       @csrf
       <div class="field">
         <label for="email">E-mail</label>
@@ -118,55 +102,12 @@
         </div>
       </div>
 
-      <div class="field">
-        <label for="password">Password</label>
-        <div class="input-wrap">
-          <input type="password" id="password" name="password" placeholder="••••••••" required autocomplete="current-password">
-          {{-- password peek toggle --}}
-          <button type="button" class="peek-btn" id="peekBtn" aria-label="Show password" title="Show password">
-            <svg class="eye-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-              <circle cx="12" cy="12" r="3"/>
-            </svg>
-            <svg class="eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
-              <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
-              <path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"/>
-              <line x1="1" y1="1" x2="23" y2="23"/>
-            </svg>
-          </button>
-        </div>
-      </div>
-
-      <label class="remember">
-        <input type="checkbox" name="remember" value="1"> Remember me on this device
-        <a href="{{ route('password.request') }}" style="margin-left:auto;color:#8B4226;font-weight:700;">
-          Forgot password?
-        </a>
-      </label>
-
-      <button type="submit" class="btn">Sign in</button>
+      <button type="submit" class="btn">Send reset link</button>
     </form>
 
-    <a href="{{ route('home') }}" class="backlink">← Back to the website</a>
+    <a href="{{ route('login') }}" class="backlink">← Back to sign in</a>
     <p class="dev-credit">Developed by
       <a href="https://digimagine.web.id" target="_blank" rel="noopener">Digimagine</a></p>
   </div>
-
-  <script>
-    (function () {
-      var input = document.getElementById('password');
-      var btn = document.getElementById('peekBtn');
-      btn.addEventListener('click', function () {
-        var show = input.type === 'password';
-        input.type = show ? 'text' : 'password';
-        btn.classList.toggle('showing', show);
-        btn.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
-        btn.title = show ? 'Hide password' : 'Show password';
-        // keep focus in the field so typing continues smoothly
-        input.focus({ preventScroll: true });
-      });
-    })();
-  </script>
 </body>
 </html>

@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>@yield('title', 'Admin') — Kopi Rider</title>
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   @if (has_custom_favicon())
     <link rel="icon" href="{{ favicon_url() }}">
     <link rel="apple-touch-icon" href="{{ favicon_url() }}">
@@ -24,7 +25,7 @@
   <!-- Mobile top bar (only visible on small screens) -->
   <header class="mobile-topbar">
     <div class="brand">
-      <img src="{{ logo_url() }}" alt="Kopi Rider logo" style="width:34px;height:34px;border-radius:10px;">
+      <img src="{{ logo_url() }}" alt="Kopi Rider logo" class="logo-img" width="40" height="40" style="background-color: rgba(246, 236, 217, 0.92);">
       <div>
         <b>Kopi Rider</b>
         <span>ADMIN</span>
@@ -37,7 +38,7 @@
 
   <aside class="sidebar" id="adminSidebar">
     <div class="brand">
-      <img src="{{ logo_url() }}" alt="Kopi Rider logo" style="width:38px;height:38px;border-radius:11px;">
+       <img src="{{ logo_url() }}" alt="Kopi Rider logo" class="logo-img" width="40" height="40" style="background-color: #FCF6EA;">
       <div>
         <b>Kopi Rider</b>
         <span>ADMIN</span>
@@ -62,8 +63,14 @@
     <a class="nav-link {{ request()->routeIs('admin.analytics.*') ? 'active' : '' }}" href="{{ route('admin.analytics.index') }}">
       <span class="ico">📈</span> Analytics
     </a>
+    <a class="nav-link {{ request()->routeIs('admin.terminal.*') ? 'active' : '' }}" href="{{ route('admin.terminal.index') }}">
+      <span class="ico">🖥️</span> Terminal
+    </a>
     <a class="nav-link {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}" href="{{ route('admin.settings.index') }}">
       <span class="ico">⚙️</span> Settings
+    </a>
+    <a class="nav-link" href="{{ asset('manual.html') }}" target="_blank" rel="noopener">
+      <span class="ico">📖</span> Manual Book
     </a>
 
     <div class="spacer"></div>
@@ -137,5 +144,6 @@
     });
   })();
 </script>
+@stack('scripts')
 </body>
 </html>

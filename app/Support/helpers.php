@@ -38,7 +38,7 @@ if (! function_exists('logo_url')) {
     {
         $path = setting('logo_path');
 
-        return $path ? asset('storage/'.$path) : asset('img/logo-icon.svg');
+        return $path ? asset('storage/'.$path) : asset('img/logo-mark.png');
     }
 }
 
@@ -58,5 +58,37 @@ if (! function_exists('has_custom_favicon')) {
     function has_custom_favicon(): bool
     {
         return (bool) setting('favicon_path');
+    }
+}
+
+if (! function_exists('mail_logo')) {
+    /**
+     * Logo used inside HTML e-mails.
+     *
+     * Returns the absolute filesystem path of the best available logo so it
+     * can be embedded inline (works in every mail client, even with remote
+     * images blocked). Falls back to the bundled PNG icons when no custom
+     * logo has been uploaded.
+     *
+     * @return array{path: ?string, url: string}
+     */
+    function mail_logo(): array
+    {
+        $custom = setting('logo_path');
+
+        if ($custom && Storage::disk('public')->exists($custom)) {
+            return [
+                'path' => Storage::disk('public')->path($custom),
+                'url' => asset('storage/'.$custom),
+            ];
+        }
+
+        foreach (['img/logo-mark.png', 'img/apple-touch-icon.png', 'img/favicon-96.png'] as $file) {
+            if (is_file(public_path($file))) {
+                return ['path' => public_path($file), 'url' => asset($file)];
+            }
+        }
+
+        return ['path' => null, 'url' => logo_url()];
     }
 }

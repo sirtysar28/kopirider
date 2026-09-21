@@ -86,6 +86,8 @@ table.list tbody tr:hover { background: #FBF6EA; }
 .badge.booked { background: #8B4226; color: #fff; }
 .badge.partial { background: #F2DCC7; color: #8B4226; }
 .badge.complete { background: #E7EBD8; color: #41522E; }
+.badge.superadmin { background: #2A1B12; color: #C98A34; }
+.badge.staffrole { background: #F3EADA; color: #A6906F; }
 
 /* ---- buttons ---- */
 .btn {
@@ -183,6 +185,76 @@ table.list tbody tr:hover { background: #FBF6EA; }
 }
 .admin-footer a { color: #8B4226; font-weight: 800; }
 .admin-footer a:hover { text-decoration: underline; }
+
+/* ============================================================
+   ARTISAN TERMINAL
+   ============================================================ */
+.terminal-card { padding: 0; overflow: hidden; border-radius: 20px; }
+.term-toolbar {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  background: #1C1108; color: #F6ECD9; padding: 12px 18px;
+  border-bottom: 1px solid rgba(246,236,217,.12);
+}
+.term-toolbar b { font-family: 'Fraunces', serif; font-size: 14px; letter-spacing: .03em; }
+.term-toolbar .term-hint { font-size: 11.5px; color: rgba(246,236,217,.5); margin-right: auto; }
+.term-toolbar .term-hint code { color: #C98A34; }
+.term-toolbar .btn-line { border-color: rgba(246,236,217,.3); color: #F6ECD9; background: transparent; }
+.term-toolbar .btn-line:hover { background: rgba(246,236,217,.12); }
+.term-dots { display: inline-flex; gap: 6px; }
+.term-dots span { width: 11px; height: 11px; border-radius: 50%; display: inline-block; }
+.term-dots span:nth-child(1) { background: #E0655A; }
+.term-dots span:nth-child(2) { background: #E8C06A; }
+.term-dots span:nth-child(3) { background: #97BA6E; }
+
+.term-body {
+  background: #140D06;
+  min-height: 320px; max-height: 52vh; overflow-y: auto;
+  padding: 18px 20px;
+  font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 13px; line-height: 1.65; color: #E9DFC9;
+  scrollbar-width: thin; scrollbar-color: #5E4A38 transparent;
+}
+.term-line { margin-bottom: 8px; word-break: break-word; white-space: pre-wrap; }
+.term-line.cmd { color: #C98A34; font-weight: 700; }
+.term-line.cmd .p { color: #97BA6E; margin-right: 7px; }
+.term-line.out pre {
+  font-family: inherit; margin: 0; white-space: pre-wrap; word-break: break-word;
+  color: #D9CDB5;
+}
+.term-line.ok pre { color: #B8D29A; }
+.term-line.err, .term-line.err pre { color: #F0A292; }
+.term-line.muted-line { color: rgba(233,223,201,.45); }
+.term-line .term-meta { color: #97BA6E; font-size: 11.5px; margin-top: 5px; opacity: .85; }
+.blink { animation: blink 1s steps(2, start) infinite; color: #C98A34; }
+@keyframes blink { to { visibility: hidden; } }
+
+.term-input {
+  display: flex; align-items: center; gap: 10px;
+  background: #1C1108; border-top: 1px solid rgba(246,236,217,.12);
+  padding: 12px 16px;
+}
+.term-input .term-prompt {
+  font-family: ui-monospace, Menlo, monospace; font-size: 12.5px;
+  color: #C98A34; white-space: nowrap; font-weight: 700;
+}
+.term-input input {
+  flex: 1; background: #140D06; border: 1px solid rgba(246,236,217,.18);
+  border-radius: 12px; padding: 11px 16px; color: #F6ECD9;
+  font-family: ui-monospace, Menlo, monospace; font-size: 14px;
+}
+.term-input input::placeholder { color: rgba(246,236,217,.35); }
+.term-input input:focus { outline: none; border-color: #C98A34; box-shadow: 0 0 0 3px rgba(201,138,52,.2); }
+.term-input .btn { min-height: 38px; }
+
+.quick-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
+.quick {
+  text-align: left; background: #FDFBF6; border: 1px solid #E4D2A8; border-radius: 16px;
+  padding: 13px 16px; cursor: pointer; font-family: inherit;
+  transition: transform .18s, box-shadow .18s, border-color .18s;
+}
+.quick:hover { transform: translateY(-2px); border-color: #8B4226; box-shadow: 0 12px 22px -16px rgba(42,27,18,.4); }
+.quick b { display: block; font-size: 13.5px; color: #2A1B12; font-family: ui-monospace, Menlo, monospace; }
+.quick span { display: block; font-size: 12px; color: #A6906F; margin-top: 3px; }
 
 /* misc */
 .muted { color: #A6906F; font-size: 13px; }

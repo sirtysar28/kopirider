@@ -79,7 +79,19 @@
       Marking a lead <strong>confirmed</strong> reserves the date — it will show as "someone is asking"
       on the public calendar until you set it to <strong>booked</strong> in the Calendar page.
     </p>
-    <button type="submit" class="btn">Save changes</button>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+      <button type="submit" class="btn">Save changes</button>
+      @if (auth()->user()->isSuperAdmin())
+        <span class="muted">Super admin zone:</span>
+        <form method="POST" action="{{ route('admin.leads.destroy', $lead) }}"
+              onsubmit="return confirm('Permanently delete lead {{ $lead->reference }}?\nThis also removes its payment records and cannot be undone.')"
+              style="display:inline;">
+          @csrf
+          @method('DELETE')
+          <button type="submit" class="btn btn-danger">🗑️ Delete lead permanently</button>
+        </form>
+      @endif
+    </div>
   </form>
 </div>
 

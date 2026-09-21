@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\TestMail;
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
 class SettingController extends Controller
@@ -68,6 +71,50 @@ class SettingController extends Controller
         ],
     ];
 
+    /**
+     * SMTP e-mail settings — powers password resets & notifications.
+     */
+    public const SMTP = [
+        'smtp_enabled' => [
+            'label' => 'Enable SMTP e-mail (password reset, notifications)',
+            'type' => 'toggle',
+        ],
+        'smtp_host' => [
+            'label' => 'SMTP host',
+            'type' => 'text',
+            'placeholder' => 'smtp.gmail.com',
+        ],
+        'smtp_port' => [
+            'label' => 'SMTP port',
+            'type' => 'text',
+            'placeholder' => '587',
+        ],
+        'smtp_encryption' => [
+            'label' => 'Encryption',
+            'type' => 'select',
+            'options' => ['tls' => 'TLS (port 587 — most common)', 'ssl' => 'SSL (port 465)', 'null' => 'None (local dev only)'],
+        ],
+        'smtp_username' => [
+            'label' => 'Username (usually the e-mail address)',
+            'type' => 'text',
+            'placeholder' => 'hello@kopirider.id',
+        ],
+        'smtp_password' => [
+            'label' => 'Password / app password (leave as-is to keep the current one)',
+            'type' => 'password',
+        ],
+        'smtp_from_address' => [
+            'label' => 'From address',
+            'type' => 'text',
+            'placeholder' => 'hello@kopirider.id',
+        ],
+        'smtp_from_name' => [
+            'label' => 'From name',
+            'type' => 'text',
+            'placeholder' => 'Kopi Rider',
+        ],
+    ];
+
     public function index()
     {
         $values = Setting::allCached();
@@ -76,9 +123,11 @@ class SettingController extends Controller
             'general' => self::GENERAL,
             'payment' => self::PAYMENT,
             'legal' => self::LEGAL,
+            'smtp' => self::SMTP,
             'values' => $values,
             'users' => \App\Models\User::orderBy('name')->get(),
             'midtransEnabled' => setting('midtrans_enabled') === '1',
+            'smtpEnabled' => setting('smtp_enabled') === '1',
         ]);
     }
 
@@ -129,6 +178,30 @@ class SettingController extends Controller
         return back()->with('success', 'Logo & favicon updated.');
     }
 
+    /**
+     * Send a branded test e-mail through the configured SMTP server.
+     */
+    public function sendTestEmail(Request $request)
+    {
+        $data = $request->validate([
+            'test_email' => ['required', 'email'],
+        ]);
+
+        if (setting('smtp_enabled') !== '1') {
+            return back()->with('error', 'Enable SMTP e-mail first, then save, then send a test.');
+        }
+
+        try {
+            Mail::to($data['test_email'])->send(new TestMail($data['test_email']));
+        } catch (\Throwable $e) {
+            report($e);
+
+            return back()->with('error', 'SMTP test failed: '.$e->getMessage());
+        }
+
+        return back()->with('success', 'Test e-mail sent to '.$data['test_email'].' — check the inbox (and spam folder).');
+    }
+
     public function update(Request $request)
     {
         $data = $request->validate([
@@ -141,6 +214,14 @@ class SettingController extends Controller
             'bank_transfer_details' => ['nullable', 'string', 'max:1000'],
             'privacy_policy' => ['nullable', 'string', 'max:20000'],
             'terms_conditions' => ['nullable', 'string', 'max:20000'],
+            'smtp_enabled' => ['nullable', 'boolean'],
+            'smtp_host' => ['nullable', 'string', 'max:190'],
+            'smtp_port' => ['nullable', 'integer', 'between:1,65535'],
+            'smtp_encryption' => ['nullable', 'in:tls,ssl,null'],
+            'smtp_username' => ['nullable', 'string', 'max:190'],
+            'smtp_password' => ['nullable', 'string', 'max:190'],
+            'smtp_from_address' => ['nullable', 'email', 'max:190'],
+            'smtp_from_name' => ['nullable', 'string', 'max:100'],
         ]);
 
         foreach (array_keys(self::GENERAL) as $key) {
@@ -163,6 +244,27 @@ class SettingController extends Controller
         // Public legal pages (empty = fall back to the built-in default text)
         Setting::set('privacy_policy', $data['privacy_policy'] ?? null);
         Setting::set('terms_conditions', $data['terms_conditions'] ?? null);
+
+        /* ---------------- SMTP ---------------- */
+        Setting::set('smtp_enabled', $request->boolean('smtp_enabled') ? '1' : '0');
+        Setting::set('smtp_host', $data['smtp_host'] ?? null);
+        Setting::set('smtp_port', (string) ($data['smtp_port'] ?? 587));
+        Setting::set('smtp_encryption', $data['smtp_encryption'] ?? 'tls');
+        Setting::set('smtp_username', $data['smtp_username'] ?? null);
+
+        // Never wipe an existing SMTP password with an empty submit.
+        if (! empty($data['smtp_password'])) {
+            Setting::set('smtp_password', $data['smtp_password']);
+        }
+
+        Setting::set('smtp_from_address', $data['smtp_from_address'] ?? null);
+        Setting::set('smtp_from_name', $data['smtp_from_name'] ?? null);
+
+        // The mailer is configured at runtime from these settings —
+        // flush the cached config so the next request picks them up.
+        if (file_exists(base_path('bootstrap/cache/config.php'))) {
+            Artisan::call('config:clear');
+        }
 
         return back()->with('success', 'Settings saved.');
     }

@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manual Book — Kopi Rider Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,480;9..144,600&family=Work+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   KOPI RIDER — Manual Book (single-file, coffee themed)
+   ============================================================ */
+* { box-sizing: border-box; margin: 0; }
+:root {
+  --brown: #2A1B12;
+  --brown-2: #3C2417;
+  --coffee: #8B4226;
+  --gold: #C98A34;
+  --cream: #F6ECD9;
+  --cream-2: #FCF6EA;
+  --line: #E4D5BC;
+  --ok: #2F7D4F;
+  --warn: #B07715;
+  --danger: #A6382E;
+  --text: #2A1B12;
+  --muted: #7A6A58;
+}
+html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+body {
+  background: var(--cream);
+  color: var(--text);
+  font-family: 'Work Sans', system-ui, -apple-system, sans-serif;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, h4 { font-family: 'Fraunces', Georgia, serif; font-weight: 600; line-height: 1.25; }
+a { color: var(--coffee); text-decoration: none; }
+a:hover { text-decoration: underline; }
+code, kbd {
+  font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  font-size: .86em; background: #EFE2C8; color: #5C3A1E;
+  border: 1px solid #E0CDA8; border-radius: 6px; padding: 2px 7px;
+}
+kbd { box-shadow: 0 1px 0 #D8C29A; }
+
+/* ---------- layout ---------- */
+.shell { display: grid; grid-template-columns: 280px 1fr; min-height: 100vh; }
+/* backdrop drawer mobile — WAJIB display:none global agar bukan grid item di desktop */
+.backdrop { display: none; }
+
+/* ---------- sidebar / TOC ---------- */
+.toc {
+  background: var(--brown); color: var(--cream);
+  padding: 26px 18px 40px; position: sticky; top: 0; height: 100vh; overflow-y: auto;
+}
+.toc .brand { display: flex; align-items: center; gap: 12px; padding: 0 8px 18px; border-bottom: 1px solid rgba(246,236,217,.14); margin-bottom: 14px; background-color: #F6ECD9;}
+.toc .brand .mark {
+  background: var(--gold); color: #1C1108; border-radius: 12px; width: 42px; height: 42px;
+  display: grid; place-items: center; font-weight: 800; font-size: 20px;
+}
+.toc .brand img.mark { background: none; object-fit: contain; }
+.toc .brand b { font-family: 'Fraunces', serif; font-size: 19px; display: block; color: #000000; }
+.toc .brand span { font-size: 10px; letter-spacing: .16em; opacity: .6; color: #000000; }
+.toc .search { margin: 0 0 14px; }
+.toc .search input {
+  width: 100%; padding: 10px 14px; border-radius: 12px; border: 1px solid rgba(246,236,217,.2);
+  background: rgba(246,236,217,.08); color: var(--cream); font: inherit; font-size: 13px; outline: none;
+}
+.toc .search input::placeholder { color: rgba(246,236,217,.45); }
+.toc .search input:focus { border-color: var(--gold); }
+.toc-group { font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: rgba(246,236,217,.45); margin: 16px 10px 6px; }
+.toc a {
+  display: block; padding: 8px 12px; border-radius: 10px; font-size: 13.5px; font-weight: 500;
+  color: rgba(246,236,217,.72); text-decoration: none; transition: background .15s, color .15s;
+}
+.toc a:hover { background: rgba(246,236,217,.1); color: var(--cream); text-decoration: none; }
+.toc a.active { background: var(--coffee); color: #fff; }
+.toc .foot { margin-top: 22px; padding: 12px 10px 0; border-top: 1px solid rgba(246,236,217,.14); font-size: 11.5px; color: rgba(246,236,217,.45); }
+.hidden { display: none !important; }
+
+/* ---------- content ---------- */
+.content { padding: 40px 48px 90px; max-width: 940px; }
+section { margin-bottom: 56px; }
+.sec-head { display: flex; align-items: center; gap: 14px; margin-bottom: 6px; }
+.sec-head .num {
+  background: var(--gold); color: #1C1108; width: 40px; height: 40px; border-radius: 12px;
+  display: grid; place-items: center; font-weight: 800; font-size: 17px; flex: none;
+}
+h2.sec-title { font-size: 27px; }
+.sec-sub { color: var(--muted); font-size: 14.5px; margin-bottom: 18px; padding-left: 54px; }
+h3 { font-size: 19px; margin: 26px 0 10px; }
+h4 { font-size: 16px; margin: 18px 0 8px; }
+p { margin-bottom: 12px; }
+ul, ol { margin: 0 0 14px 22px; }
+li { margin-bottom: 7px; }
+
+/* cover */
+.cover {
+  background: linear-gradient(150deg, #2A1B12 0%, #3C2417 55%, #522E17 100%);
+  color: var(--cream); border-radius: 22px; padding: 52px 46px; margin-bottom: 52px;
+  position: relative; overflow: hidden;
+}
+.cover::after {
+  content: ""; position: absolute; right: 30px; bottom: -10px; width: 170px; height: 170px;
+  background: url('img/logo-mark.png') center/contain no-repeat; opacity: .14;
+}
+.cover .tag { display: inline-block; background: rgba(201,138,52,.2); color: #E8C284; border: 1px solid rgba(201,138,52,.4); padding: 5px 14px; border-radius: 999px; font-size: 11.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 18px; }
+.cover h1 { font-size: 40px; margin-bottom: 10px; }
+.cover .lead { max-width: 560px; color: rgba(246,236,217,.8); font-size: 15.5px; }
+.cover .meta { margin-top: 26px; display: flex; gap: 26px; flex-wrap: wrap; font-size: 13px; }
+.cover .meta b { display: block; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: rgba(246,236,217,.5); margin-bottom: 2px; }
+
+/* boxes */
+.card { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 20px 22px; margin: 14px 0; }
+.note { border-left: 4px solid var(--gold); background: #FBF3DF; border-radius: 0 14px 14px 0; padding: 14px 18px; margin: 16px 0; font-size: 14.5px; }
+.note.tip    { border-left-color: var(--ok);   background: #EDF7EF; }
+.note.warn   { border-left-color: #C9922E; background: #FCF4E2; }
+.note.danger { border-left-color: var(--danger); background: #FBEEEC; }
+.note b:first-child, .note .nb { display: block; margin-bottom: 4px; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
+
+/* tables */
+table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 14px; background: #fff; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); }
+th { background: var(--brown); color: var(--cream); text-align: left; padding: 11px 14px; font-size: 12.5px; letter-spacing: .05em; }
+td { padding: 10px 14px; border-top: 1px solid #F0E6D2; vertical-align: top; }
+tr:nth-child(even) td { background: #FCF8EF; }
+
+/* steps */
+.steps { counter-reset: step; list-style: none; margin-left: 0; }
+.steps > li { counter-increment: step; position: relative; padding: 0 0 18px 52px; }
+.steps > li::before {
+  content: counter(step); position: absolute; left: 0; top: 0;
+  width: 34px; height: 34px; border-radius: 50%; background: var(--coffee); color: #fff;
+  display: grid; place-items: center; font-weight: 700; font-size: 15px;
+}
+.steps > li:not(:last-child)::after { content: ""; position: absolute; left: 16.5px; top: 38px; bottom: 2px; width: 2px; background: var(--line); }
+.steps > li b { display: block; margin-bottom: 2px; }
+
+/* badges */
+.badge { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 11.5px; font-weight: 700; letter-spacing: .03em; }
+.b-green  { background: #E3F3E7; color: var(--ok); }
+.b-yellow { background: #FBF0D3; color: var(--warn); }
+.b-red    { background: #FBE4E1; color: var(--danger); }
+.b-brown  { background: #F1E4D2; color: #7A4A22; }
+.b-gray   { background: #EFEFEF; color: #666; }
+
+/* terminal preview */
+.term { background: #1A120C; color: #D8CBA8; border-radius: 14px; padding: 16px 18px; font-family: ui-monospace, Menlo, monospace; font-size: 13px; line-height: 1.7; margin: 14px 0; overflow-x: auto; }
+.term .p { color: #E8A34D; }
+
+/* flow */
+.flow { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 16px 0; }
+.flow .f {
+  background: #fff; border: 1.5px solid var(--line); border-radius: 12px; padding: 8px 14px;
+  font-size: 13px; font-weight: 600;
+}
+.flow .arrow { color: var(--gold); font-weight: 800; }
+
+/* top button */
+#toTop {
+  position: fixed; right: 26px; bottom: 26px; width: 46px; height: 46px; border-radius: 50%;
+  background: var(--brown); color: var(--cream); border: none; cursor: pointer; font-size: 19px;
+  box-shadow: 0 6px 18px rgba(42,27,18,.35); opacity: 0; pointer-events: none; transition: opacity .25s;
+}
+#toTop.show { opacity: 1; pointer-events: auto; }
+
+/* print */
+@media print {
+  .toc, #toTop { display: none !important; }
+  .shell { display: block; }
+  .content { padding: 0; max-width: none; }
+  section { page-break-inside: avoid; }
+  body { background: #fff; }
+}
+
+/* mobile */
+.menu-btn { display: none; }
+@media (max-width: 900px) {
+  .shell { grid-template-columns: 1fr; }
+  .toc { position: fixed; inset: 0 auto 0 0; width: 290px; z-index: 50; transform: translateX(-102%); transition: transform .25s; height: 100dvh; }
+  body.toc-open .toc { transform: none; box-shadow: 0 0 60px rgba(0,0,0,.4); }
+  .backdrop { position: fixed; inset: 0; background: rgba(30,17,8,.5); z-index: 40; }
+  body.toc-open .backdrop { display: block; }
+  .menu-btn {
+    display: grid; place-items: center; position: fixed; left: 16px; bottom: 16px; z-index: 45;
+    width: 52px; height: 52px; border-radius: 50%; border: none; cursor: pointer;
+    background: var(--brown); color: var(--cream); font-size: 21px; box-shadow: 0 6px 18px rgba(42,27,18,.4);
+  }
+  .content { padding: 26px 20px 80px; }
+  .cover { padding: 34px 26px; }
+  .cover h1 { font-size: 30px; }
+  .sec-sub { padding-left: 0; }
+}
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- ================= TOC ================= -->
+  <aside class="toc" id="toc">
+    <div class="brand">
+      <img class="mark" src="img/logo-mark.png" alt="Kopi Rider logo">
+      <div><b>Kopi Rider</b><span>MANUAL BOOK</span></div>
+    </div>
+    <div class="search">
+      <input type="search" id="tocSearch" placeholder="🔎 Cari topik… (mis. midtrans)">
+    </div>
+
+    <div class="toc-group">Pendahuluan</div>
+    <a href="#tentang">1. Tentang Aplikasi</a>
+    <a href="#glossary">2. Istilah Penting</a>
+
+    <div class="toc-group">Memulai</div>
+    <a href="#login">3. Login &amp; Lupa Password</a>
+    <a href="#dashboard">4. Dashboard</a>
+
+    <div class="toc-group">Operasional Harian</div>
+    <a href="#leads">5. Leads (Calon Customer)</a>
+    <a href="#calendar">6. Calendar (Kalender)</a>
+    <a href="#payments">7. Payments &amp; Midtrans</a>
+
+    <div class="toc-group">Konten Website</div>
+    <a href="#packages">8. Packages (Paket)</a>
+    <a href="#media">9. Media (Galeri)</a>
+
+    <div class="toc-group">Tools &amp; Pengaturan</div>
+    <a href="#analytics">10. Analytics</a>
+    <a href="#terminal">11. Terminal</a>
+    <a href="#settings">12. Settings</a>
+
+    <div class="toc-group">Referensi</div>
+    <a href="#sisi-customer">13. Sisi Customer (Website)</a>
+    <a href="#workflow">14. Workflow Lengkap</a>
+    <a href="#faq">15. FAQ &amp; Troubleshooting</a>
+
+    <div class="foot">Manual Book v1.0 · Kopi Rider<br>Developed by Digimagine</div>
+  </aside>
+  <div class="backdrop" id="backdrop"></div>
+
+  <!-- ================= CONTENT ================= -->
+  <main class="content">
+
+    <div class="cover">
+      <span class="tag">Admin Panel Guide</span>
+      <img src="img/logo-mark.png" alt="Kopi Rider logo" style="width:92px;height:92px;border-radius:22px;margin-bottom:18px;display:block;">
+      <h1>Manual Book<br>Kopi Rider</h1>
+      <p class="lead">Panduan lengkap mengelola <b>Coffee Truck Booking &amp; Lead Generation Platform</b> — dari membalas lead pertama sampai mengatur pembayaran Midtrans.</p>
+      <div class="meta">
+        <div><b>Versi</b>v1.0</div>
+        <div><b>Platform</b>Laravel 11 · PHP 8.2+</div>
+        <div><b>Akses Panel</b>/admin</div>
+        <div><b>Terakhir Update</b>September 2026</div>
+      </div>
+    </div>
+
+    <!-- ============ 1. TENTANG ============ -->
+    <section id="tentang">
+      <div class="sec-head"><div class="num">1</div><h2 class="sec-title">Tentang Aplikasi</h2></div>
+      <p class="sec-sub">Apa itu Kopi Rider dan cara kerjanya secara garis besar.</p>
+
+      <p><b>Kopi Rider</b> adalah platform booking coffee truck &amp; lead generation yang dibangun dengan Laravel 11. Ini <b>bukan</b> toko online — tidak ada keranjang, checkout, atau pemesanan otomatis. Seluruh sistem dirancang untuk satu tujuan: mengubah pengunjung website menjadi <b>lead event yang berkualitas</b> yang mengalir ke WhatsApp, lalu dikonfirmasi manually oleh tim.</p>
+
+      <h3>Prinsip Utama Sistem</h3>
+      <div class="card">
+        <ul>
+          <li><b>Lead tidak boleh hilang.</b> Data customer disimpan ke database <u>lebih dulu</u>, baru redirect ke WhatsApp. Walau WhatsApp gagal dibuka, data sudah aman dan dapat di-follow up.</li>
+          <li><b>Partial lead tetap tersimpan.</b> Customer yang mengisi setengah lalu keluar tetap terekam untuk follow-up.</li>
+          <li><b>Konfirmasi oleh manusia.</b> Semua booking dikonfirmasi lewat percakapan WhatsApp, bukan sistem.</li>
+        </ul>
+      </div>
+
+      <h3>Fitur Ringkas</h3>
+      <table>
+        <tr><th>Modul</th><th>Fungsi</th><th>Menu Admin</th></tr>
+        <tr><td>Public website</td><td>Landing, packages, free events, gallery, booking flow</td><td>—</td></tr>
+        <tr><td>Lead capture</td><td>Auto-save partial + full lead, nomor referensi <code>KR-0001</code></td><td>📝 Leads</td></tr>
+        <tr><td>Kalender ketersediaan</td><td>Status tanggal: available / enquiry / booked</td><td>📅 Calendar</td></tr>
+        <tr><td>Manajemen paket</td><td>CRUD paket berbayar &amp; gratis dengan harga awal</td><td>💼 Packages</td></tr>
+        <tr><td>Pembayaran</td><td>Deposit &amp; balance, payment link Midtrans + transfer bank</td><td>Dalam detail Leads</td></tr>
+        <tr><td>Media</td><td>Upload hero image &amp; foto galeri</td><td>🖼️ Media</td></tr>
+        <tr><td>Analytics</td><td>Funnel konversi event booking</td><td>📈 Analytics</td></tr>
+        <tr><td>Artisan terminal</td><td>Jalankan command deploy tanpa SSH</td><td>🖥️ Terminal</td></tr>
+        <tr><td>Pengaturan</td><td>WhatsApp, sosmed, SMTP, Midtrans, branding, user</td><td>⚙️ Settings</td></tr>
+      </table>
+
+      <div class="note"><span class="nb">💡 Info</span>Buku manual ini bisa diakses dari menu admin. Gunakan kotak pencarian di sidebar kiri untuk lompat langsung ke topik.</div>
+    </section>
+
+    <!-- ============ 2. GLOSSARY ============ -->
+    <section id="glossary">
+      <div class="sec-head"><div class="num">2</div><h2 class="sec-title">Istilah Penting</h2></div>
+      <p class="sec-sub">Kosakata yang akan sering muncul di seluruh manual ini.</p>
+
+      <table>
+        <tr><th>Istilah</th><th>Artinya</th></tr>
+        <tr><td><b>Lead</b></td><td>Calon customer yang mengisi form booking di website. Bisa complete (selesai) atau partial (setengah jalan).</td></tr>
+        <tr><td><b>Reference</b></td><td>Nomor unik lead, format <code>KR-0001</code>, <code>KR-0002</code>, dst. Ditampilkan ke customer sebagai bukti enquiry.</td></tr>
+        <tr><td><b>Partial lead</b></td><td>Lead yang berhenti di tengah step (belum submit). Tetap tersimpan otomatis untuk follow-up.</td></tr>
+        <tr><td><b>Available</b> <span class="badge b-green">🟢</span></td><td>Tanggal masih kosong dan bisa dibooking.</td></tr>
+        <tr><td><b>Enquiry</b> <span class="badge b-yellow">🟡</span></td><td>Sudah ada yang bertanya tanggal ini (booking belum final).</td></tr>
+        <tr><td><b>Booked</b> <span class="badge b-red">🔴</span></td><td>Tanggal sudah terbooking / tidak tersedia.</td></tr>
+        <tr><td><b>Deposit</b></td><td>Pembayaran pertama (uang muka) untuk mengunci tanggal.</td></tr>
+        <tr><td><b>Balance</b></td><td>Sisa pembayaran setelah deposit.</td></tr>
+        <tr><td><b>Starting price</b></td><td>Harga awal paket yang tampil ke publik sebelum nego.</td></tr>
+        <tr><td><b>Free event</b></td><td>Event pasar/festival/komunitas — tanpa biaya awal dengan sistem minimum guarantee.</td></tr>
+      </table>
+    </section>
+
+    <!-- ============ 3. LOGIN ============ -->
+    <section id="login">
+      <div class="sec-head"><div class="num">3</div><h2 class="sec-title">Login &amp; Lupa Password</h2></div>
+      <p class="sec-sub">Cara masuk ke admin panel dan memulihkan akun.</p>
+
+      <h3>3.1 — Masuk ke Admin Panel</h3>
+      <ol class="steps">
+        <li><b>Buka halaman login</b>Buka <code>/login</code> di browser (contoh: <code>https://domainanda.com/login</code>).</li>
+        <li><b>Isi email &amp; password</b>Gunakan akun staff yang sudah terdaftar. Tombol mata <span class="badge b-brown">👁</span> di samping kolom password bisa diklik untuk melihat apa yang diketik.</li>
+        <li><b>Klik Sign in</b>Jika berhasil, Anda diarahkan ke <code>/admin</code> (Dashboard).</li>
+      </ol>
+
+      <h3>3.2 — Lupa Password</h3>
+      <ol class="steps">
+        <li><b>Klik "Forgot password?"</b>Di halaman login, klik link di bawah form.</li>
+        <li><b>Masukkan email</b>Sistem mengirim link reset dalam email berbranding Kopi Rider.</li>
+        <li><b>Buka email &amp; klik tombol reset</b>Link bersifat <b>signed, sekali pakai</b>, dan <b>kedaluwarsa dalam 60 menit</b>.</li>
+        <li><b>Buat password baru</b>Setelah itu login seperti biasa dengan password baru.</li>
+      </ol>
+
+      <div class="note warn"><span class="nb">⚠️ Penting</span>Link reset hanya berlaku 60 menit. Kalau kedaluwarsa, ulangi permintaan reset. Cek folder spam jika email tidak muncul.</div>
+
+      <div class="note"><span class="nb">💡 Ganti password langsung</span>Sudah login? Ganti password lewat <b>Settings → 🔐 Change password</b> (lihat bab 12).</div>
+    </section>
+
+    <!-- ============ 4. DASHBOARD ============ -->
+    <section id="dashboard">
+      <div class="sec-head"><div class="num">4</div><h2 class="sec-title">Dashboard</h2></div>
+      <p class="sec-sub">Ringkasan bisnis dalam satu layar — halaman pertama setelah login.</p>
+
+      <p>Dashboard (<code>/admin</code>) menampilkan gambaran cepat kondisi bisnis. Ini titik awal setiap kali membuka panel:</p>
+
+      <div class="card">
+        <ul>
+          <li><b>📊 Statistik leads</b> — jumlah lead masuk (complete &amp; partial) pada periode terpilih.</li>
+          <li><b>💰 Revenue</b> — total pembayaran terkonfirmasi (paid) dari deposit + balance.</li>
+          <li><b>📅 Booked days</b> — berapa hari yang sudah terbooking di kalender.</li>
+          <li><b>Aktivitas terbaru</b> — lead terbaru yang masuk agar tidak ada yang terlewat.</li>
+        </ul>
+      </div>
+
+      <h3>Cara Kerja Harian yang Disarankan</h3>
+      <ol>
+        <li>Buka <b>Dashboard</b> → cek lead baru hari ini.</li>
+        <li>Buka <b>Leads</b> → proses lead berstatus <span class="badge b-brown">new</span> (lihat bab 5).</li>
+        <li>Setelah deal → ubah status <span class="badge b-green">confirmed</span>, set tanggal jadi <span class="badge b-red">booked</span> di Calendar, dan catat deposit di Payments.</li>
+      </ol>
+    </section>
+
+    <!-- ============ 5. LEADS ============ -->
+    <section id="leads">
+      <div class="sec-head"><div class="num">5</div><h2 class="sec-title">Leads — Calon Customer</h2></div>
+      <p class="sec-sub">Jantung operasional: kelola setiap enquiry dari masuk sampai deal (atau lost).</p>
+
+      <h3>5.1 — Daftar Leads</h3>
+      <p>Buka <b>📝 Leads</b> di sidebar. Tabel menampilkan semua lead dengan info: reference, nama, tanggal event, tipe event, paket, dan status. Filter tersedia di bagian atas:</p>
+      <table>
+        <tr><th>Filter</th><th>Kegunaan</th></tr>
+        <tr><td><b>Status</b></td><td>new / contacted / negotiating / confirmed / lost</td></tr>
+        <tr><td><b>Complete</b></td><td>Hanya lead complete, hanya partial, atau semua</td></tr>
+        <tr><td><b>Search</b></td><td>Cari nama, nomor WhatsApp, atau reference (mis. <code>KR-0012</code>)</td></tr>
+      </table>
+
+      <h3>5.2 — Status Workflow</h3>
+      <p>Setiap lead melewati pipeline berikut. Ubah status dari halaman detail lead.</p>
+      <div class="flow">
+        <span class="f">new</span><span class="arrow">→</span>
+        <span class="f">contacted</span><span class="arrow">→</span>
+        <span class="f">negotiating</span><span class="arrow">→</span>
+        <span class="f" style="border-color:#2F7D4F;color:#2F7D4F;">confirmed ✓</span>
+        <span style="color:#7A6A58;font-size:12px;font-weight:600;">&nbsp;atau&nbsp;</span>
+        <span class="f" style="border-color:#A6382E;color:#A6382E;">lost ✕</span>
+      </div>
+      <table>
+        <tr><th>Status</th><th>Arti</th><th>Aksi Anda</th></tr>
+        <tr><td><span class="badge b-brown">new</span></td><td>Baru masuk, belum dihubungi</td><td>Buka WhatsApp &amp; sapa customer</td></tr>
+        <tr><td><span class="badge b-yellow">contacted</span></td><td>Sudah dihubungi, menunggu balasan</td><td>Follow up jika lama tidak balas</td></tr>
+        <tr><td><span class="badge b-brown">negotiating</span></td><td>Sedang negosiasi paket/harga/tanggal</td><td>Sepakati detail &amp; kirim penawaran</td></tr>
+        <tr><td><span class="badge b-green">confirmed</span></td><td>Deal! Booking final</td><td>Set tanggal <span class="badge b-red">booked</span>, catat pembayaran</td></tr>
+        <tr><td><span class="badge b-red">lost</span></td><td>Batal / tidak jadi</td><td>Boleh dicantumkan alasan di notes</td></tr>
+      </table>
+
+      <h3>5.3 — Halaman Detail Lead</h3>
+      <p>Klik salah satu lead untuk membuka detailnya. Di sini Anda bisa:</p>
+      <ul>
+        <li><b>Lihat semua data enquiry</b> — tanggal, tipe event, jumlah tamu, paket pilihan, pesan WhatsApp yang ter-generate.</li>
+        <li><b>Open WhatsApp chat</b> — tombol one-click membuka chat WhatsApp customer dengan pesan yang sudah tersiapkan.</li>
+        <li><b>Ubah status</b> — sesuai workflow di atas.</li>
+        <li><b>Kelola Payments</b> — catat deposit &amp; balance (lihat bab 7).</li>
+        <li><b>Hapus lead</b> — hanya jika benar-benar diperlukan (data lead berharga, pikirkan dua kali).</li>
+      </ul>
+
+      <div class="note tip"><span class="nb">✅ Best practice</span>Proses lead <span class="badge b-brown">new</span> di bawah 24 jam. Kecepatan balasan adalah faktor konversi terbesar untuk bisnis event.</div>
+
+      <div class="note"><span class="nb">💡 Partial lead</span>Lead partial (customer berhenti di tengah form) tetap muncul di daftar. Data yang sudah terisi (mis. tanggal + tipe event) cukup untuk follow-up proaktif via WhatsApp.</div>
+    </section>
+
+    <!-- ============ 6. CALENDAR ============ -->
+    <section id="calendar">
+      <div class="sec-head"><div class="num">6</div><h2 class="sec-title">Calendar — Kalender Ketersediaan</h2></div>
+      <p class="sec-sub">Kontrol tanggal mana yang terbuka untuk booking di website.</p>
+
+      <h3>6.1 — Cara Kerja</h3>
+      <p>Buka <b>📅 Calendar</b>. Kalender menampilkan status setiap tanggal. Klik tanggal mana pun untuk mengubahnya — penyimpanan <b>instan</b> (tidak perlu tombol save).</p>
+      <table>
+        <tr><th>Status</th><th>Simbol</th><th>Efek di website</th></tr>
+        <tr><td>Available</td><td><span class="badge b-green">🟢</span></td><td>Customer bisa memilih tanggal ini</td></tr>
+        <tr><td>Enquiry</td><td><span class="badge b-yellow">🟡</span></td><td>Tampil "someone is asking" — customer masih bisa bertanya, tapi tahu ada peminat lain</td></tr>
+        <tr><td>Booked</td><td><span class="badge b-red">🔴</span></td><td>Tanggal terkunci, tidak bisa dipilih</td></tr>
+      </table>
+
+      <div class="note"><span class="nb">💡 Otomatis</span>Ketika customer meminta tanggal lewat form booking, tanggal itu otomatis berubah jadi <span class="badge b-yellow">🟡 enquiry</span> di kalender publik — tanpa Anda melakukan apa pun.</div>
+
+      <h3>6.2 — Notes per Tanggal</h3>
+      <p>Setiap tanggal bisa diberi catatan internal (mis. "ACARA PT ABC — konfirmasi deposit 20 Sep"). Notes tidak terlihat oleh customer, hanya di panel admin.</p>
+
+      <h3>6.3 — Kapan Mengubah Status Manual</h3>
+      <ul>
+        <li>Lead <span class="badge b-green">confirmed</span> → set tanggal jadi <span class="badge b-red">booked</span> <b>+</b> catat payments.</li>
+        <li>Ada acara pribadi/truck maintenance → langsung set <span class="badge b-red">booked</span> agar tidak ada enquiry masuk.</li>
+        <li>Enquiry batal/nego gagal → kembalikan ke <span class="badge b-green">available</span>.</li>
+      </ul>
+    </section>
+
+    <!-- ============ 7. PAYMENTS ============ -->
+    <section id="payments">
+      <div class="sec-head"><div class="num">7</div><h2 class="sec-title">Payments &amp; Midtrans</h2></div>
+      <p class="sec-sub">Catat deposit &amp; balance, kirim payment link, atau gunakan transfer bank.</p>
+
+      <h3>7.1 — Konsep</h3>
+      <p>Pembayaran dicatat <b>per lead</b> (bukan per paket). Setiap lead punya maksimal dua record:</p>
+      <table>
+        <tr><th>Tipe</th><th>Fungsi</th><th>Waktu pakai</th></tr>
+        <tr><td><b>Deposit</b></td><td>Uang muka pengunci tanggal</td><td>Saat deal / status confirmed</td></tr>
+        <tr><td><b>Balance</b></td><td>Sisa pelunasan</td><td>Sebelum atau saat hari-H</td></tr>
+      </table>
+      <p>Setiap payment punya status: <span class="badge b-yellow">pending</span> → <span class="badge b-green">paid</span>.</p>
+
+      <h3>7.2 — Menambah Pembayaran</h3>
+      <ol class="steps">
+        <li><b>Buka detail lead</b>Leads → klik lead yang dimaksud.</li>
+        <li><b>Scroll ke bagian Payments</b>Pilih tipe (deposit/balance), isi nominal, dan metode.</li>
+        <li><b>Save</b>Record muncul dengan status <span class="badge b-yellow">pending</span>.</li>
+        <li><b>Generate payment link (opsional)</b>Untuk metode Midtrans, klik <b>Generate link</b> — sistem membuat payment link yang bisa dikirim ke customer.</li>
+        <li><b>Tandai paid setelah uang masuk</b>Ubah status ke <span class="badge b-green">paid</span> setelah konfirmasi (otomatis via webhook Midtrans, atau manual).</li>
+      </ol>
+
+      <h3>7.3 — Midtrans vs Transfer Bank</h3>
+      <table>
+        <tr><th></th><th>Midtrans (payment link)</th><th>Transfer bank (manual)</th></tr>
+        <tr><td>Alur</td><td>Link dikirim ke customer → bayar (VA, QRIS, kartu, e-wallet) → webhook otomatis update status</td><td>Anda kirim nomor rekening → cek mutasi → tandai paid manual</td></tr>
+        <tr><td>Cocok untuk</td><td>Sebagian besar customer</td><td>Customer yang tidak pakai metode digital</td></tr>
+        <tr><td>Konfigurasi</td><td>Settings → 💳 Payments (lihat bab 12.2)</td><td>Tidak ada</td></tr>
+      </table>
+
+      <div class="note"><span class="nb">💡 Webhook Midtrans</span>Notifikasi pembayaran dikirim Midtrans ke <code>/api/midtrans/notification</code>. Selama kredensial benar, status payment berubah otomatis menjadi paid tanpa input manual.</div>
+
+      <div class="note warn"><span class="nb">⚠️ Jangan tandai paid sebelum dana benar-benar masuk</span>Untuk transfer bank manual, selalu cek mutasi rekening dulu sebelum mengubah status ke paid.</div>
+    </section>
+
+    <!-- ============ 8. PACKAGES ============ -->
+    <section id="packages">
+      <div class="sec-head"><div class="num">8</div><h2 class="sec-title">Packages — Paket Layanan</h2></div>
+      <p class="sec-sub">Kelola paket yang tampil di website beserta harga awal dan fiturnya.</p>
+
+      <h3>8.1 — Daftar &amp; Membuat Paket</h3>
+      <p>Buka <b>💼 Packages</b>. Klik <b>Add package</b> untuk membuat paket baru, atau <b>Edit</b> pada paket yang ada. Kolom yang perlu diisi:</p>
+      <table>
+        <tr><th>Kolom</th><th>Keterangan</th></tr>
+        <tr><td><b>Name</b></td><td>Nama paket (tampil di website)</td></tr>
+        <tr><td><b>Slug</b></td><td>Identifier URL, huruf kecil + strip (auto dari nama)</td></tr>
+        <tr><td><b>Description</b></td><td>Deskripsi singkat paket</td></tr>
+        <tr><td><b>Starting price</b></td><td>Harga awal tampil publik — pelanggan melihat harga sebelum harus chat</td></tr>
+        <tr><td><b>Currency</b></td><td>IDR (default) atau lainnya</td></tr>
+        <tr><td><b>Features</b></td><td>Daftar fitur (satu per baris / poin) yang tampil sebagai bullet</td></tr>
+        <tr><td><b>Audience</b></td><td><span class="badge b-brown">paid</span> untuk event berbayar · <span class="badge b-green">free</span> untuk pasar/festival/komunitas</td></tr>
+        <tr><td><b>Active</b></td><td>Paket aktif tampil di website; nonaktif = disembunyikan tanpa dihapus</td></tr>
+        <tr><td><b>Sort order</b></td><td>Urutan tampil di website (kecil → besar)</td></tr>
+      </table>
+
+      <h3>8.2 — Paket "Free" (Free Events)</h3>
+      <p>Paket dengan audience <span class="badge b-green">free</span> ditampilkan di alur booking ketika customer memilih tipe event pasar/festival/komunitas, dengan penjelasan opsi gratis + minimum guarantee. Harga tampil sebagai <b>"No upfront fee"</b>.</p>
+
+      <div class="note tip"><span class="nb">✅ Tips konten</span>Gunakan starting price yang realistis tapi menarik — ini yang membuat customer berani melanjutkan ke WhatsApp. Update sort order agar paket terbaik tampil paling atas.</div>
+    </section>
+
+    <!-- ============ 9. MEDIA ============ -->
+    <section id="media">
+      <div class="sec-head"><div class="num">9</div><h2 class="sec-title">Media — Hero &amp; Galeri</h2></div>
+      <p class="sec-sub">Upload foto untuk halaman utama dan galeri website.</p>
+
+      <h3>9.1 — Upload</h3>
+      <ol class="steps">
+        <li><b>Buka 🖼️ Media</b> di sidebar admin.</li>
+        <li><b>Pilih file</b> — hero image (foto utama landing page) dan/atau foto galeri.</li>
+        <li><b>Upload</b> — file tersimpan di disk <code>public</code> dan langsung tampil di website.</li>
+      </ol>
+
+      <h3>9.2 — Mengelola Foto Galeri</h3>
+      <ul>
+        <li><b>Toggle</b> — sembunyikan/tampilkan foto tanpa menghapus (mis. foto seasonal).</li>
+        <li><b>Delete</b> — hapus permanen dari storage.</li>
+        <li>Galeri di website <b>lazy-load</b> — ringan walau fotonya sudah 30+.</li>
+      </ul>
+
+      <div class="note"><span class="nb">💡 Filosofi galeri</span>Galeri sengaja mulai kosong (tanpa stok foto palsu). Isi bertahap dengan foto event asli — otentisitas menjual.</div>
+
+      <div class="note warn"><span class="nb">⚠️ Foto tidak muncul setelah upload?</span>Jalankan <code>storage:link</code> dari menu <b>🖥️ Terminal</b> (bab 11). Ini membuat symlink <code>public/storage</code> yang dibutuhkan agar file terlihat di web.</div>
+    </section>
+
+    <!-- ============ 10. ANALYTICS ============ -->
+    <section id="analytics">
+      <div class="sec-head"><div class="num">10</div><h2 class="sec-title">Analytics</h2></div>
+      <p class="sec-sub">Funnel konversi alur booking — lihat di mana customer drop off.</p>
+
+      <p>Buka <b>📈 Analytics</b>. Halaman ini menampilkan <b>conversion funnel</b> dari event tracking yang terpasang di alur booking:</p>
+      <div class="flow">
+        <span class="f">Buka form</span><span class="arrow">→</span>
+        <span class="f">Pilih tanggal</span><span class="arrow">→</span>
+        <span class="f">Pilih tipe &amp; tamu</span><span class="arrow">→</span>
+        <span class="f">Lihat paket</span><span class="arrow">→</span>
+        <span class="f">Isi kontak</span><span class="arrow">→</span>
+        <span class="f" style="border-color:#2F7D4F;color:#2F7D4F;">Submit + WhatsApp</span>
+      </div>
+      <p>Event dikirim otomatis oleh website ke endpoint <code>/api/analytics</code> setiap kali customer menyelesaikan sebuah step.</p>
+
+      <h3>Cara Membacanya</h3>
+      <ul>
+        <li><b>Penurunan besar di satu step</b> → step itu bermasalah (terlalu ribet, harga kurang jelas, dsb.) — perbaiki dulu sebelum menambah trafik.</li>
+        <li><b>Banyak submit tapi WhatsApp tidak dibuka</b> → cek pesan preview / nomor WhatsApp di Settings.</li>
+        <li>Gunakan data ini untuk keputusan konten: foto, harga awal, urutan paket.</li>
+      </ul>
+    </section>
+
+    <!-- ============ 11. TERMINAL ============ -->
+    <section id="terminal">
+      <div class="sec-head"><div class="num">11</div><h2 class="sec-title">Terminal — Artisan Tanpa SSH</h2></div>
+      <p class="sec-sub">Jalankan command deploy langsung dari admin panel.</p>
+
+      <p>Buka <b>🖥️ Terminal</b>. Dari sini Anda bisa menjalankan perintah artisan Laravel tanpa akses SSH ke server — berguna saat hosting shared/managed.</p>
+
+      <h3>11.1 — Quick Commands</h3>
+      <table>
+        <tr><th>Command</th><th>Kapan dipakai</th></tr>
+        <tr><td><code>migrate --force</code></td><td>Setelah update aplikasi — terapkan migrasi database baru</td></tr>
+        <tr><td><code>storage:link</code></td><td>Foto upload tidak muncul di web → buat/ulang symlink storage</td></tr>
+        <tr><td><code>optimize</code></td><td>Setelah perubahan besar — cache config, route &amp; view agar cepat</td></tr>
+        <tr><td><code>optimize:clear</code></td><td>Perubahan tidak terlihat di web → flush semua cache</td></tr>
+        <tr><td><code>migrate:status</code></td><td>Cek migrasi mana yang sudah/belum jalan</td></tr>
+        <tr><td><code>cache:clear</code> / <code>config:clear</code></td><td>Bersihkan cache spesifik</td></tr>
+        <tr><td><code>route:list</code></td><td>Lihat semua URL yang terdaftar</td></tr>
+        <tr><td><code>about</code></td><td>Info versi Laravel, PHP &amp; environment</td></tr>
+      </table>
+
+      <h3>11.2 — Free Input</h3>
+      <p>Ketik command artisan apa pun di kotak input (tanpa prefiks <code>php artisan</code>) lalu tekan <kbd>Enter</kbd> atau klik <b>Run</kbd>. Riwayat command bisa dipanggil dengan <kbd>↑</kbd> / <kbd>↓</kbd>. Contoh:</p>
+      <div class="term"><span class="p">$</span> migrate --force<br><span class="p">$</span> config:cache</div>
+
+      <div class="note danger"><span class="nb">🛡️ Keamanan</span>
+        Hanya command artisan yang diterima. Command interaktif/long-running (<code>tinker</code>, <code>serve</code>, <code>queue:work</code>) diblokir, dan command destruktif (<code>migrate:fresh</code>, <code>db:wipe</code>) meminta konfirmasi. Command dijalankan di dalam proses PHP (<code>Artisan::call()</code>) — kompatibel dengan hosting yang mematikan <code>exec</code>.
+      </div>
+    </section>
+
+    <!-- ============ 12. SETTINGS ============ -->
+    <section id="settings">
+      <div class="sec-head"><div class="num">12</div><h2 class="sec-title">Settings — Pengaturan</h2></div>
+      <p class="sec-sub">Semua konfigurasi aplikasi dalam satu halaman.</p>
+
+      <h3>12.1 — 🌐 General</h3>
+      <ul>
+        <li><b>WhatsApp number</b> — nomor tujuan semua enquiry (format internasional tanpa <code>+</code>, contoh: <code>6281234567890</code>). <b>Penting:</b> nomor ini dipakai tombol booking di seluruh website.</li>
+        <li><b>Instagram / TikTok URL</b> — link sosial di footer &amp; halaman sosial.</li>
+        <li><b>Hero badge text</b> — teks kecil di badge hero landing page.</li>
+      </ul>
+
+      <h3>12.2 — 💳 Payments (Midtrans)</h3>
+      <ul>
+        <li>Isi <b>Server Key</b>, <b>Client Key</b>, dan mode <b>Sandbox / Production</b> dari dashboard Midtrans Anda.</li>
+        <li>Kunci inilah yang dipakai tombol <b>Generate link</b> pada pembayaran (bab 7).</li>
+      </ul>
+
+      <h3>12.3 — 📧 E-mail (SMTP)</h3>
+      <ul>
+        <li>Konfigurasi lengkap: host, port, enkripsi TLS/SSL, username, password, from-address &amp; nama.</li>
+        <li>Kredensial disimpan di database dan diterapkan <b>saat runtime</b> — tidak perlu edit <code>.env</code> atau redeploy.</li>
+        <li>Mengosongkan kolom password saat save <b>tidak</b> menghapus password lama (anti-lupa-isian).</li>
+        <li>Gunakan tombol <b>📨 Send a test e-mail</b> untuk memverifikasi — email tes berbranding penuh akan dikirim ke alamat From.</li>
+      </ul>
+      <div class="note"><span class="nb">💡 Template email</span>Semua email (reset password, tes, notifikasi) memakai satu template: header logo di coklat tua, garis emas, kartu konten krem, tombol CTA, footer link sosial. Logo disematkan inline (<code>cid:</code>) sehingga tampil walau klien email memblokir gambar remote.</div>
+
+      <h3>12.4 — 📄 Legal Pages</h3>
+      <p>Edit konten Privacy Policy dan Terms &amp; Conditions yang tampil di <code>/privacy-policy</code> dan <code>/terms-and-conditions</code>.</p>
+
+      <h3>12.5 — 🖼️ Logo &amp; Favicon</h3>
+      <p>Upload logo dan favicon sendiri menggantikan bawaan. Berlaku langsung di seluruh website, admin panel, dan email.</p>
+
+      <h3>12.6 — 🔐 Change Password</h3>
+      <ol>
+        <li>Masukkan password saat ini, lalu password baru dua kali.</li>
+        <li>Save — login berikutnya memakai password baru.</li>
+      </ol>
+
+      <h3>12.7 — 👥 Staff Users</h3>
+      <ul>
+        <li><b>Tambah staf</b> — isi nama, email, password; langsung bisa login.</li>
+        <li><b>Ubah role</b> — naik/turunkan level user.</li>
+        <li><b>Hapus user</b> — cabut akses panel.</li>
+      </ul>
+      <div class="note warn"><span class="nb">⚠️ Praktik aman</span>Hanya berikan akun pada orang yang memang mengoperasikan panel. Segera hapus akun staf yang sudah tidak aktif.</div>
+    </section>
+
+    <!-- ============ 13. SISI CUSTOMER ============ -->
+    <section id="sisi-customer">
+      <div class="sec-head"><div class="num">13</div><h2 class="sec-title">Sisi Customer — Website Publik</h2></div>
+      <p class="sec-sub">Pahami apa yang dilihat customer agar bisa menjawab pertanyaan mereka.</p>
+
+      <h3>13.1 — Halaman Publik</h3>
+      <table>
+        <tr><th>Halaman</th><th>URL</th><th>Isi</th></tr>
+        <tr><td>Landing</td><td><code>/</code></td><td>Hero (slot foto/video), paket dengan harga awal, "Why us", sosial</td></tr>
+        <tr><td>Check your date</td><td><code>/check-date</code></td><td>Alur booking mandiri (bisa dibuka sebagai overlay dari halaman mana pun)</td></tr>
+        <tr><td>Packages</td><td><code>/packages</code></td><td>Semua paket + harga awal sebelum harus chat</td></tr>
+        <tr><td>Free events</td><td><code>/free-events</code></td><td>Penjelasan opsi gratis + minimum guarantee — bisa langsung dikirim ke organizer</td></tr>
+        <tr><td>Gallery</td><td><code>/gallery</code></td><td>Galeri foto (lazy-load, tumbuh seiring upload Anda)</td></tr>
+      </table>
+
+      <h3>13.2 — Alur Booking Customer</h3>
+      <ol class="steps">
+        <li><b>Pick a date</b>Kalender live: 🟢 available · 🟡 ada yang bertanya · 🔴 booked. Ketukan terjawab instan.</li>
+        <li><b>Event type + guest range</b>Hanya tombol — tanpa mengetik.</li>
+        <li><b>Step dinamis</b>Event berbayar → tampil paket dengan harga awal. Pasar/festival/komunitas → tampil penjelasan opsi gratis.</li>
+        <li><b>Contact</b>Nama + nomor WhatsApp, dengan preview pesan yang sudah tertulis natural.</li>
+        <li><b>Submit → WhatsApp</b>Lead tersimpan dulu (dapat reference <code>KR-XXXX</code>), baru WhatsApp terbuka dengan pesan siap kirim.</li>
+      </ol>
+
+      <div class="note tip"><span class="nb">✅ Kenapa begini</span>Customer melihat nomor referensi = ada bukti enquiry resmi. Anda mendapat data lengkap walau chat WhatsApp tidak jadi terkirim.</div>
+    </section>
+
+    <!-- ============ 14. WORKFLOW ============ -->
+    <section id="workflow">
+      <div class="sec-head"><div class="num">14</div><h2 class="sec-title">Workflow Lengkap End-to-End</h2></div>
+      <p class="sec-sub">Dari klik pertama customer sampai hari-H event — checklist peran admin di setiap tahap.</p>
+
+      <ol class="steps">
+        <li><b>Customer mengisi form di website</b>Tanggal → tipe event → tamu → paket → kontak. Partial lead tersimpan otomatis di setiap step.</li>
+        <li><b>Lead masuk ke panel (status: new)</b>Tanggal yang diminta otomatis jadi 🟡 enquiry di kalender publik.</li>
+        <li><b>Admin membuka WhatsApp &amp; menyapa</b>Dari detail lead: klik <b>Open WhatsApp chat</b>. Ubah status → <span class="badge b-yellow">contacted</span>.</li>
+        <li><b>Negosiasi</b>Sepakati paket, harga final, dan detail. Status → <span class="badge b-brown">negotiating</span>.</li>
+        <li><b>Deal</b>Status → <span class="badge b-green">confirmed</span>. Set tanggal <span class="badge b-red">booked</span> di Calendar (+ notes internal).</li>
+        <li><b>Deposit</b>Tambah payment deposit di detail lead → generate payment link Midtrans (atau kirim rekening). Tandai <span class="badge b-green">paid</span> saat dana masih.</li>
+        <li><b>Persiapan &amp; dokumentasi</b>Upload foto event ke Media setelah selesai — galeri bertambah, sisi website makin kuat.</li>
+        <li><b>Balance</b>Tagih pelunasan (record balance, tandai paid setelah masuk).</li>
+      </ol>
+    </section>
+
+    <!-- ============ 15. FAQ ============ -->
+    <section id="faq">
+      <div class="sec-head"><div class="num">15</div><h2 class="sec-title">FAQ &amp; Troubleshooting</h2></div>
+      <p class="sec-sub">Masalah umum dan solusinya.</p>
+
+      <h3>Customer bilang WhatsApp tidak terbuka setelah submit — apa yang hilang?</h3>
+      <p><b>Tidak ada yang hilang.</b> Lead sudah tersimpan sebelum redirect. Cari nomor referensi customer (<code>KR-XXXX</code>) di menu Leads, lalu hubungi dia lewat nomor WhatsApp yang tercatat.</p>
+
+      <h3>Foto hasil upload tidak muncul di website</h3>
+      <p>Buka <b>Terminal</b> → jalankan <code>storage:link</code>. Jika masih belum, jalankan <code>optimize:clear</code> lalu refresh halaman (hard refresh: <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>R</kbd>).</p>
+
+      <h3>Email reset password tidak terkirim</h3>
+      <ol>
+        <li>Cek <b>Settings → 📧 SMTP</b> — klik <b>Send a test e-mail</b> untuk memverifikasi.</li>
+        <li>Suruh customer cek folder spam.</li>
+        <li>Perubahan SMTP berlaku runtime — tidak perlu redeploy.</li>
+      </ol>
+
+      <h3>Perubahan di admin tidak kelihatan di website</h3>
+      <p>Cache. Buka <b>Terminal</b> → <code>optimize:clear</code>. Setelah yakin semuanya stabil, jalankan <code>optimize</code> untuk menyalakan kembali cache performa.</p>
+
+      <h3>Payment Midtrans tidak otomatis jadi paid</h3>
+      <ol>
+        <li>Pastikan Server Key/Client Key & mode di <b>Settings → 💳 Payments</b> sudah benar.</li>
+        <li>Pastikan notifikasi Midtrans mengarah ke <code>https://domainanda.com/api/midtrans/notification</code>.</li>
+        <li>Sementara itu, tandai paid manual setelah verifikasi dana masuk.</li>
+      </ol>
+
+      <h3>Tanggal sudah deal tapi masih hijau di website</h3>
+      <p>Status booked tidak otomatis dari konfirmasi lead — set manual di <b>Calendar</b> (klik tanggal → booked). Ini memberi Anda kontrol penuh atas ketersediaan.</p>
+
+      <h3>Lupa password admin</h3>
+      <p>Gunakan <b>Forgot password?</b> di halaman login (bab 3.2). Jika email juga bermasalah, minta staf lain membuat/reset akun Anda lewat <b>Settings → 👥 Staff users</b>.</p>
+
+      <div class="note"><span class="nb">📞 Butuh bantuan teknis?</span>Hubungi developer: <a href="https://digimagine.web.id" target="_blank" rel="noopener">Digimagine</a>.</div>
+    </section>
+
+    <footer style="border-top:1px solid var(--line);padding-top:22px;color:var(--muted);font-size:13px;">
+      © 2026 Kopi Rider — Manual Book v1.0 · Developed by <a href="https://digimagine.web.id" target="_blank" rel="noopener">Digimagine</a> · Dokumen ini dioptimalkan untuk layar &amp; cetak.
+    </footer>
+  </main>
+</div>
+
+<button class="menu-btn" id="menuBtn" aria-label="Buka daftar isi">☰</button>
+<button id="toTop" aria-label="Kembali ke atas">↑</button>
+
+<script>
+(function () {
+  // ---- TOC search filter ----
+  var input = document.getElementById('tocSearch');
+  var links = Array.prototype.slice.call(document.querySelectorAll('.toc a'));
+  var groups = Array.prototype.slice.call(document.querySelectorAll('.toc-group'));
+  input.addEventListener('input', function () {
+    var q = this.value.trim().toLowerCase();
+    links.forEach(function (a) {
+      var hit = !q || a.textContent.toLowerCase().indexOf(q) !== -1
+        || (a.getAttribute('href') || '').toLowerCase().indexOf(q) !== -1;
+      a.classList.toggle('hidden', !hit);
+    });
+    groups.forEach(function (g) { g.classList.remove('hidden'); });
+  });
+
+  // ---- active section highlight ----
+  var sections = links.map(function (a) { return document.querySelector(a.getAttribute('href')); }).filter(Boolean);
+  function onScroll() {
+    var pos = window.scrollY + 120, idx = 0;
+    sections.forEach(function (s, i) { if (s.offsetTop <= pos) idx = i; });
+    links.forEach(function (a) { a.classList.remove('active'); });
+    if (sections[idx]) links[idx].classList.add('active');
+
+    var top = document.getElementById('toTop');
+    top.classList.toggle('show', window.scrollY > 500);
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // ---- to top ----
+  document.getElementById('toTop').addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // ---- mobile drawer ----
+  var body = document.body;
+  document.getElementById('menuBtn').addEventListener('click', function () { body.classList.toggle('toc-open'); });
+  document.getElementById('backdrop').addEventListener('click', function () { body.classList.remove('toc-open'); });
+  links.forEach(function (a) { a.addEventListener('click', function () { body.classList.remove('toc-open'); }); });
+})();
+</script>
+</body>
+</html>
