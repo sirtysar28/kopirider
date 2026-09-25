@@ -33,6 +33,10 @@ class LeadApiController extends Controller
             'name' => ['nullable', 'string', 'max:120'],
             'whatsapp' => ['nullable', 'string', 'max:30'],
             'complete' => ['nullable', 'boolean'],
+            'consent_privacy' => ['nullable', 'boolean'],
+            'consent_terms' => ['nullable', 'boolean'],
+            'consent_marketing' => ['nullable', 'boolean'],
+            'consent_photos' => ['nullable', 'boolean'],
         ]);
 
         $isComplete = (bool) ($data['complete'] ?? false)
@@ -45,6 +49,14 @@ class LeadApiController extends Controller
                 return response()->json([
                     'ok' => false,
                     'message' => 'Please complete every step of the booking flow first.',
+                ], 422);
+            }
+
+            // The two mandatory consent checkboxes must be ticked — nothing may be pre-ticked.
+            if (empty($data['consent_privacy']) || empty($data['consent_terms'])) {
+                return response()->json([
+                    'ok' => false,
+                    'message' => 'Please confirm the Privacy Policy and Booking Terms & Conditions to continue.',
                 ], 422);
             }
         }
@@ -72,6 +84,13 @@ class LeadApiController extends Controller
             $attributes['is_complete'] = true;
             $attributes['completed_at'] = now();
             $attributes['status'] = 'new';
+
+            // Store a timestamped record of the consent checkboxes.
+            $attributes['consent_privacy'] = (bool) ($data['consent_privacy'] ?? false);
+            $attributes['consent_terms'] = (bool) ($data['consent_terms'] ?? false);
+            $attributes['consent_marketing'] = (bool) ($data['consent_marketing'] ?? false);
+            $attributes['consent_photos'] = (bool) ($data['consent_photos'] ?? false);
+            $attributes['consented_at'] = now();
         }
 
         if ($lead) {

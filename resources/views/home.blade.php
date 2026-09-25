@@ -101,7 +101,7 @@
       </div>
       <div class="pkg-card reveal reveal-delay-3">
         <h3>🪜 The rooftop deck</h3>
-        <p style="font-size:14px;">Our truck carries a rooftop deck for six — the most photographed coffee corner at any event.</p>
+        <p style="font-size:14px;">Our truck carries a rooftop deck for up to seven guests — the most photographed coffee corner at any event.</p>
       </div>
     </div>
   </div>

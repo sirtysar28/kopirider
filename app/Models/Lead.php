@@ -10,6 +10,7 @@ class Lead extends Model
         'reference', 'session_id', 'event_date', 'event_type', 'guest_range',
         'package_id', 'name', 'whatsapp', 'message', 'source', 'status',
         'is_complete', 'whatsapp_opened_at', 'completed_at',
+        'consent_privacy', 'consent_terms', 'consent_marketing', 'consent_photos', 'consented_at',
     ];
 
     protected function casts(): array
@@ -19,6 +20,11 @@ class Lead extends Model
             'is_complete' => 'boolean',
             'whatsapp_opened_at' => 'datetime',
             'completed_at' => 'datetime',
+            'consented_at' => 'datetime',
+            'consent_privacy' => 'boolean',
+            'consent_terms' => 'boolean',
+            'consent_marketing' => 'boolean',
+            'consent_photos' => 'boolean',
         ];
     }
 

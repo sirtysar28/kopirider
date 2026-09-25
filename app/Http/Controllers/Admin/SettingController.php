@@ -21,6 +21,10 @@ class SettingController extends Controller
         'tiktok_url' => 'TikTok URL',
         'hero_status' => 'Hero status badge text (e.g. "open today · Pererenan")',
         'contact_email' => 'Contact e-mail',
+        'nib_number' => 'NIB — business identification number (shown in legal pages & footer)',
+        'registered_address' => 'Registered address (shown in legal pages & footer)',
+        'legal_effective_date' => 'Legal pages — effective date text (e.g. "24 September 2026")',
+        'hosting_provider' => 'Hosting provider + country (shown in the Privacy Policy)',
     ];
 
     /**
@@ -59,13 +63,23 @@ class SettingController extends Controller
      * Public legal pages — editable content (simple HTML allowed).
      */
     public const LEGAL = [
+        'terms_conditions' => [
+            'label' => 'Booking Terms & Conditions — page content',
+            'type' => 'textarea',
+            'rows' => 12,
+        ],
+        'terms_of_use' => [
+            'label' => 'Website Terms of Use — page content',
+            'type' => 'textarea',
+            'rows' => 12,
+        ],
         'privacy_policy' => [
             'label' => 'Privacy Policy — page content',
             'type' => 'textarea',
             'rows' => 12,
         ],
-        'terms_conditions' => [
-            'label' => 'Terms & Conditions — page content',
+        'cookie_policy' => [
+            'label' => 'Cookie Policy — page content',
             'type' => 'textarea',
             'rows' => 12,
         ],
@@ -214,6 +228,8 @@ class SettingController extends Controller
             'bank_transfer_details' => ['nullable', 'string', 'max:1000'],
             'privacy_policy' => ['nullable', 'string', 'max:20000'],
             'terms_conditions' => ['nullable', 'string', 'max:20000'],
+            'terms_of_use' => ['nullable', 'string', 'max:20000'],
+            'cookie_policy' => ['nullable', 'string', 'max:20000'],
             'smtp_enabled' => ['nullable', 'boolean'],
             'smtp_host' => ['nullable', 'string', 'max:190'],
             'smtp_port' => ['nullable', 'integer', 'between:1,65535'],
@@ -244,6 +260,8 @@ class SettingController extends Controller
         // Public legal pages (empty = fall back to the built-in default text)
         Setting::set('privacy_policy', $data['privacy_policy'] ?? null);
         Setting::set('terms_conditions', $data['terms_conditions'] ?? null);
+        Setting::set('terms_of_use', $data['terms_of_use'] ?? null);
+        Setting::set('cookie_policy', $data['cookie_policy'] ?? null);
 
         /* ---------------- SMTP ---------------- */
         Setting::set('smtp_enabled', $request->boolean('smtp_enabled') ? '1' : '0');

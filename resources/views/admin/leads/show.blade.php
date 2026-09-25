@@ -43,6 +43,17 @@
     </div>
     <div class="item"><div class="k">WhatsApp</div><div class="v">{{ $lead->whatsapp ?? '—' }}</div></div>
     <div class="item"><div class="k">WA opened at</div><div class="v">{{ $lead->whatsapp_opened_at?->format('d M Y H:i') ?? 'Never' }}</div></div>
+    <div class="item"><div class="k">Consent given</div><div class="v">
+      @if ($lead->consented_at)
+        <span class="badge complete">privacy ✓</span>
+        <span class="badge complete">terms ✓</span>
+        <span class="badge {{ $lead->consent_marketing ? 'complete' : 'partial' }}">marketing {{ $lead->consent_marketing ? '✓' : '—' }}</span>
+        <span class="badge {{ $lead->consent_photos ? 'complete' : 'partial' }}">photos {{ $lead->consent_photos ? '✓' : '—' }}</span>
+        <br><small class="muted">{{ $lead->consented_at->format('d M Y H:i') }}</small>
+      @else
+        <span class="muted">No consent record (old lead)</span>
+      @endif
+    </div></div>
   </div>
 
   @if ($lead->message)

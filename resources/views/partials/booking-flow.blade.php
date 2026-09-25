@@ -88,11 +88,30 @@
           <strong>Pre-written message:</strong><br>
           <span id="previewMessage">Hi! I'd like to book the truck for [date], a [event type], around [guests] guests.</span>
         </div>
+        <div class="consent-boxes">
+          <label class="consent-check">
+            <input type="checkbox" id="consentPrivacy">
+            <span>I have read the <a href="{{ route('privacy-policy') }}" target="_blank" rel="noopener">Privacy Policy</a>. Kopi Rider may contact me on WhatsApp about this request. <em class="req">(required)</em></span>
+          </label>
+          <label class="consent-check">
+            <input type="checkbox" id="consentTerms">
+            <span>I have read the <a href="{{ route('terms-and-conditions') }}" target="_blank" rel="noopener">Booking Terms &amp; Conditions</a>. They apply if I confirm a booking. <em class="req">(required)</em></span>
+          </label>
+          <label class="consent-check">
+            <input type="checkbox" id="consentMarketing">
+            <span>Send me occasional news and offers from Kopi Rider on WhatsApp. I can stop them at any time. <em>(optional)</em></span>
+          </label>
+          <label class="consent-check">
+            <input type="checkbox" id="consentPhotos">
+            <span>Kopi Rider may use photos or video from my event in which my guests or I can be recognised, on its website and social media. I have my guests’ agreement, and I can withdraw this for future use at any time. <em>(optional)</em></span>
+          </label>
+        </div>
       </div>
       <div class="flow-footer">
         <button class="back" data-prev>← Back</button>
         <button class="btn" id="submitLead">Send request</button>
       </div>
+      <p class="consent-microcopy">We only use your details to handle your request. We never sell your data.</p>
     </div>
 
     {{-- Step 5: success (not in the progress bar) --}}
@@ -106,6 +125,11 @@
         <p class="sub" style="margin-bottom:22px;">
           WhatsApp should open in a new tab — just press send there.
           If it doesn't open, don't worry: we already have your request and will reach out.
+        </p>
+        <p class="sub" style="margin-bottom:22px;">
+          <strong>Your request is saved, but your date is not reserved yet.</strong>
+          A date is only available once we have confirmed it to you in writing on WhatsApp, and your
+          booking is only confirmed when you have paid the 50% deposit.
         </p>
         <button class="btn btn-line btn-sm" data-close-booking>Close</button>
       </div>

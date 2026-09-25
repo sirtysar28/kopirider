@@ -50,6 +50,16 @@
       </div>
     </div>
 
+    {{-- How the free option is confirmed — legal text (Update 21-09-2026) --}}
+    <div class="free-info reveal reveal-delay-2" style="margin-top:26px;">
+      <h3 style="font-size:20px;margin-bottom:10px;">📝 How the free option is confirmed</h3>
+      <p style="font-size:15px;margin-bottom:0;">
+        We confirm the free option with a short written agreement, in English and Bahasa Indonesia.
+        It sets out the agreed minimum sales, what you provide as organiser (space, access and permits)
+        and what happens if the event is cancelled. We send it to you before we confirm your date.
+      </p>
+    </div>
+
     <div class="reveal reveal-delay-3" style="text-align:center;margin-top:26px;">
       <a href="{{ route('check-date') }}?open=1" class="btn btn-gold" data-open-booking>Check a date for my event</a>
       <p style="font-size:13px;color:#A6906F;margin-top:12px;">

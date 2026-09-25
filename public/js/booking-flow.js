@@ -295,6 +295,19 @@
       return;
     }
 
+    const consentPrivacy = $('#consentPrivacy');
+    const consentTerms = $('#consentTerms');
+    if (consentPrivacy && !consentPrivacy.checked) {
+      toast('Please confirm you have read the Privacy Policy to continue.');
+      consentPrivacy.focus();
+      return;
+    }
+    if (consentTerms && !consentTerms.checked) {
+      toast('Please confirm you have read the Booking Terms & Conditions to continue.');
+      consentTerms.focus();
+      return;
+    }
+
     const btn = $('#submitLead');
     btn.disabled = true;
     btn.innerHTML = '<span class="spinner"></span>&nbsp; Saving your request…';
@@ -311,6 +324,10 @@
         name: name,
         whatsapp: wa,
         complete: true,
+        consent_privacy: !!(consentPrivacy && consentPrivacy.checked),
+        consent_terms: !!(consentTerms && consentTerms.checked),
+        consent_marketing: !!($('#consentMarketing') && $('#consentMarketing').checked),
+        consent_photos: !!($('#consentPhotos') && $('#consentPhotos').checked),
       }),
     })
       .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, data: d }; }); })

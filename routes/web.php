@@ -31,6 +31,8 @@ Route::get('/free-events', [PageController::class, 'freeEvents'])->name('free-ev
 Route::get('/gallery', [PageController::class, 'gallery'])->name('gallery');
 Route::get('/privacy-policy', [PageController::class, 'privacyPolicy'])->name('privacy-policy');
 Route::get('/terms-and-conditions', [PageController::class, 'termsConditions'])->name('terms-and-conditions');
+Route::get('/terms-of-use', [PageController::class, 'termsOfUse'])->name('terms-of-use');
+Route::get('/cookie-policy', [PageController::class, 'cookiePolicy'])->name('cookie-policy');
 
 /*
 |--------------------------------------------------------------------------

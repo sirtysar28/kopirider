@@ -72,13 +72,32 @@
           <span>TikTok</span>
         </a>
       </div>
+
+      @php
+          $footerNib = setting('nib_number');
+          $footerAddress = setting('registered_address');
+      @endphp
+      <p class="footer-legal-lines">
+        Kopi Rider{{ $footerNib ? ' · NIB '.$footerNib : '' }}{{ $footerAddress ? ' · '.$footerAddress : '' }}<br>
+        <a href="mailto:{{ setting('contact_email', 'admin@kopirider.com') }}">{{ setting('contact_email', 'admin@kopirider.com') }}</a>
+        · <a href="{{ wa_link() }}" target="_blank" rel="noopener">WhatsApp</a>
+        · <a href="{{ setting('instagram_url', 'https://instagram.com') }}" target="_blank" rel="noopener">Instagram</a>
+        · <a href="{{ setting('tiktok_url', 'https://tiktok.com') }}" target="_blank" rel="noopener">TikTok</a>
+      </p>
+
       <nav class="footer-links" aria-label="Legal">
+        <a href="{{ route('terms-and-conditions') }}">Booking Terms &amp; Conditions</a>
+        <span aria-hidden="true">·</span>
+        <a href="{{ route('terms-of-use') }}">Website Terms of Use</a>
+        <span aria-hidden="true">·</span>
         <a href="{{ route('privacy-policy') }}">Privacy Policy</a>
         <span aria-hidden="true">·</span>
-        <a href="{{ route('terms-and-conditions') }}">Terms &amp; Conditions</a>
+        <a href="{{ route('cookie-policy') }}">Cookie Policy</a>
+        <span aria-hidden="true">·</span>
+        <a href="#cookie-settings" data-cookie-settings>Cookie settings</a>
       </nav>
       <div class="footnote">
-        <span>© {{ date('Y') }} Kopi Rider · Bali · Halal certified · Rooftop for six ·
+        <span>© {{ date('Y') }} Kopi Rider · Bali ·
           <a href="{{ route('login') }}" style="text-decoration:none;">Admin login</a></span>
         <span class="dev-credit">Developed by
           <a href="https://digimagine.web.id" target="_blank" rel="noopener">Digimagine</a></span>
@@ -88,6 +107,7 @@
 </footer>
 
 @include('partials.booking-flow')
+@include('partials.cookie-banner')
 
 @php
     $krPackages = ($packages ?? \App\Models\Package::active()->get())->map(fn ($p) => [
@@ -103,6 +123,7 @@
 </script>
 <script src="{{ asset('js/app.js') }}" defer></script>
 <script src="{{ asset('js/booking-flow.js') }}" defer></script>
+<script src="{{ asset('js/cookie-consent.js') }}" defer></script>
 @stack('scripts')
 </body>
 </html>

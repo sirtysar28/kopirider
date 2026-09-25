@@ -378,3 +378,220 @@ footer.site-footer { margin-top: 48px; padding-bottom: 26px; }
   .btn-login span { display: none; }
   .btn-login { padding: 0; width: 40px; }
 }
+
+/* ============================================================
+   LEGAL UPDATE 21-09-2026 — cookie consent, booking-form
+   consent checkboxes, legal notes, cookie table, footer lines
+   ============================================================ */
+
+/* --- legal page meta line (Version 1.0 · Effective …) --- */
+.legal-content .legal-meta {
+  display: inline-block;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #7C6650;
+  background: #F6ECD9;
+  border: 1px solid #EADFC6;
+  border-radius: 999px;
+  padding: 4px 14px;
+  margin: 0 0 14px;
+}
+
+/* --- legal notes (packages page: price note, allergens, rooftop rules) --- */
+.legal-note {
+  margin-top: 26px;
+  background: #FBF6EA;
+  border: 1px solid #EFE3C4;
+  border-radius: 20px;
+  padding: 24px 26px;
+}
+.legal-note h3 { font-size: 19px; margin: 0 0 8px; color: #2A1B12; }
+.legal-note p { font-size: 14.5px; color: #4A382B; line-height: 1.7; margin: 0; }
+.legal-note ol.rooftop-rules {
+  margin: 10px 0 10px 22px;
+  font-size: 14.5px;
+  color: #4A382B;
+  line-height: 1.7;
+}
+.legal-note ol.rooftop-rules li { margin: 6px 0; }
+
+/* --- footer legal lines (contact row) --- */
+.footer-legal-lines {
+  font-size: 13.5px;
+  color: #7C6650;
+  line-height: 1.9;
+  margin: 4px 0 14px;
+}
+.footer-legal-lines a { color: #7C6650; font-weight: 600; text-decoration: none; }
+.footer-legal-lines a:hover { color: #8B4226; text-decoration: underline; }
+
+/* --- cookie consent banner --- */
+.cookie-consent {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 1200;
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+  background: rgba(42, 27, 18, 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+.cookie-consent[hidden] { display: none; }
+.cookie-consent-box {
+  max-width: 920px;
+  margin: 0 auto;
+  background: #FFFDF6;
+  border: 1px solid #EADFC6;
+  border-radius: 20px;
+  padding: 18px 22px;
+  box-shadow: 0 18px 48px rgba(42, 27, 18, 0.25);
+}
+.cookie-consent-box p { margin: 0 0 14px; font-size: 14px; color: #4A382B; line-height: 1.65; }
+.cookie-consent-box a { color: #8B4226; font-weight: 700; }
+.cookie-consent-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+.cookie-settings-link {
+  background: none;
+  border: none;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  color: #8B4226;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 6px 4px;
+}
+
+/* --- cookie settings dialog --- */
+.cookie-settings-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(42, 27, 18, 0.5);
+}
+.cookie-settings-overlay[hidden] { display: none; }
+.cookie-settings {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  max-height: 86vh;
+  overflow-y: auto;
+  background: #FFFDF6;
+  border: 1px solid #EADFC6;
+  border-radius: 22px;
+  padding: 26px 26px 22px;
+  box-shadow: 0 24px 60px rgba(42, 27, 18, 0.3);
+}
+.cookie-settings h3 { margin: 0 0 6px; font-size: 21px; color: #2A1B12; }
+.cookie-settings .modal-close {
+  position: absolute;
+  top: 14px; right: 14px;
+}
+.cookie-toggle-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 13px 0;
+  border-bottom: 1px solid #F0E6CE;
+  font-size: 14px;
+  color: #4A382B;
+  line-height: 1.55;
+  cursor: pointer;
+}
+.cookie-toggle-row:last-of-type { border-bottom: none; }
+.cookie-toggle-row input[type="checkbox"] {
+  margin-top: 3px;
+  width: 20px;
+  height: 20px;
+  accent-color: #8B4226;
+  flex: 0 0 auto;
+}
+.cookie-toggle-row input:disabled { cursor: not-allowed; }
+.cookie-settings .cookie-consent-actions { margin-top: 16px; justify-content: flex-end; }
+
+/* --- booking flow: consent checkboxes --- */
+.consent-boxes {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #FBF6EA;
+  border: 1px solid #EFE3C4;
+  border-radius: 16px;
+  padding: 14px 16px;
+}
+.consent-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13px;
+  color: #4A382B;
+  line-height: 1.55;
+  cursor: pointer;
+}
+.consent-check input[type="checkbox"] {
+  margin-top: 2px;
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+  accent-color: #8B4226;
+  cursor: pointer;
+}
+.consent-check a { color: #8B4226; font-weight: 700; text-decoration: underline; }
+.consent-check em { font-style: normal; color: #A6906F; }
+.consent-check em.req { color: #8B4226; font-weight: 600; }
+.consent-microcopy {
+  margin: 10px 0 0;
+  text-align: center;
+  font-size: 12px;
+  color: #A6906F;
+}
+
+/* --- cookie policy table --- */
+.table-wrap { overflow-x: auto; margin: 10px 0; border-radius: 14px; border: 1px solid #EADFC6; }
+.cookie-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+  color: #4A382B;
+  background: #FFFDF6;
+  min-width: 640px;
+}
+.cookie-table th,
+.cookie-table td {
+  text-align: left;
+  padding: 10px 14px;
+  border-bottom: 1px solid #F0E6CE;
+  vertical-align: top;
+  line-height: 1.5;
+}
+.cookie-table th {
+  background: #F6ECD9;
+  color: #5A3825;
+  font-size: 12.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+.cookie-table tr:last-child td { border-bottom: none; }
+.cookie-table code {
+  font-size: 12.5px;
+  background: #F6ECD9;
+  border-radius: 6px;
+  padding: 2px 6px;
+  color: #8B4226;
+}
+
+@media (max-width: 640px) {
+  .cookie-consent-box { padding: 16px; }
+  .cookie-consent-actions .btn { flex: 1 1 100%; }
+  .cookie-settings-link { flex: 1 1 100%; text-align: center; }
+  .cookie-settings { padding: 22px 18px 18px; }
+  .cookie-settings .cookie-consent-actions .btn { flex: 1 1 100%; }
+  .legal-note { padding: 20px 18px; }
+}
